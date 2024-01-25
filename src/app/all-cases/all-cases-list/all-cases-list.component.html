@@ -1,0 +1,86 @@
+<div class="container">
+    <div class="card">
+        <div class="row" style="display:flex;flex-direction: row;align-items: center;">
+            <div class="section-b col-md-3">
+                <input class="input m-3" (keyup)="applyFilter($event.target.value)" type="text" name="Search" placeholder="Search...">
+            </div>
+            <div class="col-md-6" style="display:flex ;justify-content:flex-start;gap:10px">
+            </div>
+            <div class="add-coupon col-md-3">
+                <a routerLink="/allCases/add">+&nbsp;{{'Add New Cases'}}</a>
+            </div>
+  
+        </div>
+  
+    </div>
+    <div class="card">
+        <table mat-table matSort [dataSource]="filteredData?.length? filteredData:dataSource">
+            <ng-container matColumnDef="s.no">
+                <th class="first" mat-header-cell *matHeaderCellDef>
+                    <span>S.No</span>
+                </th>
+                <td mat-cell *matCellDef="let request">{{request._id}}</td>
+            </ng-container>
+  
+            <ng-container matColumnDef="title">
+                <th mat-header-cell *matHeaderCellDef>
+                    <span>Title</span>
+                </th>
+                <td mat-cell *matCellDef="let request">{{request.title}}</td>
+            </ng-container>
+  
+            <ng-container matColumnDef="category">
+                <th mat-header-cell *matHeaderCellDef>
+                    <span>Category</span>
+                </th>
+                <td mat-cell *matCellDef="let request">{{request.category}}</td>
+            </ng-container>
+  
+            <ng-container matColumnDef="subCategory">
+                <th mat-header-cell *matHeaderCellDef>
+                    <span>Sub Category</span>
+                </th>
+                <td mat-cell *matCellDef="let request">{{request?.subCategory}}</td>
+            </ng-container>
+            <ng-container matColumnDef="inst">
+                <th mat-header-cell *matHeaderCellDef>
+                    <span>Institution</span>
+                </th>
+                <td mat-cell *matCellDef="let request">{{request.institution.name}}</td>
+            </ng-container>
+            <ng-container matColumnDef="week">
+              <th mat-header-cell *matHeaderCellDef>
+                  <span>Week No</span>
+              </th>
+              <td mat-cell *matCellDef="let request">{{request.duration}}</td>
+          </ng-container>
+          <ng-container matColumnDef="month">
+              <th mat-header-cell *matHeaderCellDef>
+                  <span>Month</span>
+              </th>
+              <td mat-cell *matCellDef="let request">{{request.time}}</td>
+          </ng-container>
+          <ng-container matColumnDef="action">
+              <th class="last" mat-header-cell *matHeaderCellDef>
+                  <span>Action</span>
+              </th>
+              <td mat-cell *matCellDef="let request">
+                  <div class="displayicon">
+                      <mat-icon style="font-size: 18px;cursor:pointer" matTooltip="Edit" (click)="edit('edit',request._id,request)">edit</mat-icon>
+                      <mat-icon style="font-size: 18px;cursor:pointer" matTooltip="Delete" (click)="delete(request._id)">delete</mat-icon>
+                      <mat-icon style="font-size: 18px;cursor:pointer" matTooltip="View" (click)="edit('view',request._id,request)">visibility</mat-icon>
+                  </div>
+              </td>
+          </ng-container>
+            <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+            <tr mat-row *matRowDef="let request; columns: columnsToDisplay"></tr>
+  
+        </table>
+        <div class="spinner-container" *ngIf="!dataSource.data?.length  && !noData">
+            <mat-spinner  [diameter]="50" ></mat-spinner>
+        </div>
+        <div class="no_data" *ngIf="!dataSource.data?.length  && noData">
+            <p style="color:white;">{{'No data available'}}</p>
+         </div>
+    </div>
+  </div>

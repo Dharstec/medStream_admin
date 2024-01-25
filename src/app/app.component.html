@@ -1,0 +1,12 @@
+<!-- <app-splash-screen #splash *ngIf="hide"></app-splash-screen> -->
+<!--<div class="section-b col-4">
+    //     <input  style="margin: 0  !important;" placeholder="PPT File" class="input" type="text" name="Search" matInput
+    //         formControlName="ppt" maxlength="50" required> 
+    //     <mat-error *ngIf="submitted && form.get('ppt')?.errors?.required">{{'PPT is required'}}</mat-error>
+    // </div>--> 
+<ng-container *ngIf="!hide">
+    <app-sidenav *ngIf="show" (onToogleSideNav)="onTogglesideNav($event)"></app-sidenav>
+    <app-headers *ngIf="show" [collapsed]="isSideNavCollapsed" [screenWidth]="screenWidth"></app-headers>
+    <app-body [collapsed]="isSideNavCollapsed" [screenWidth]="screenWidth"></app-body> 
+</ng-container>
+

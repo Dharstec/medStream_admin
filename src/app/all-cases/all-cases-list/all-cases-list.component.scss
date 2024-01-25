@@ -1,0 +1,89 @@
+.section-b .input {
+  padding: 15px;
+  border: none;
+  border-radius: 10px;
+  background: #111111;
+  color: #ffffff;
+  width: 100%;
+  border: #111111;
+  line-height: 24px;
+}
+
+.add-coupon {
+  font-size: 16px;
+
+  a {
+      font-weight: 500;
+      color: #ffffff;
+      text-decoration:none;
+  }
+}
+
+.no_data{
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.card {
+background-color: #2E2E2E;
+height: 90%;
+  border-radius: 10px;
+  // border: 1px solid #ddd;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+  padding: 5px;
+  text-align: center;
+  margin: 10px;
+ 
+}
+
+.disFlex {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+
+  .search-container {
+      position: relative;
+
+      .normal-search {
+          .search {
+              border: none;
+              height: 2.375rem;
+              padding-left: 2.5rem;
+              padding-right: 1.25rem;
+              background-color: #f3f3f9;
+              box-shadow: none;
+              border-radius: 1.875rem;
+              outline: 0;
+          }
+
+          .search-icon {
+              position: absolute;
+              font-size: 1rem;
+              line-height: 2.375rem;
+              left: 0.813rem;
+              top: 0;
+              color: #74788d;
+
+          }
+      }
+  }
+}
+
+
+.mat-table {
+  width: 100%;
+}
+
+.displayicon {
+  display: flex;
+}
+
+.first{
+  border-bottom-left-radius: 15px;
+  border-top-left-radius: 15px;
+}
+.last{
+  border-bottom-right-radius: 15px;
+  border-top-right-radius: 15px;
+}

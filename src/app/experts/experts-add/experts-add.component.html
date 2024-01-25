@@ -1,0 +1,83 @@
+<div class="container">
+  <div class="card-title">
+    <i class="fa fa-arrow-left" style="font-size:20px;cursor: pointer;color: white;" routerLink="/experts/list"></i>&nbsp;&nbsp;
+    <h2 style="padding:0px !important ;margin:0px !important;font-weight: 600;color:white;font-size: 18px;
+    margin: 10px 0px 10px 0px !important;">Add
+      {{'Experts'}}</h2>
+  </div>
+  <div class="card">
+    <h4 style="padding:0px !important ;margin:0px !important;font-weight: 600;color: #f24c44;">{{'Experts Detail'}}</h4>
+    <hr class="new4">    
+    <form [formGroup]="form">
+      <div class="row">
+     
+        <div class="col-md-8">
+          <!-- <h4 style="padding:0px !important ;margin:0px !important;font-weight: 600">{{'Product Detail'}}</h4> -->
+          <div class="row">
+            <div class="section-b col">
+              <!-- <mat-label>Name<span class="required">*</span></mat-label> -->
+              <input placeholder="Name" class="input" type="text" name="Search" matInput formControlName="name" maxlength="50"
+                required>
+              <mat-hint class="hintalign">{{form.get('name').value?.length || 0}}/50
+              </mat-hint>
+              <mat-error *ngIf="submitted && form.get('name')?.errors?.required">{{'Name is required'}}</mat-error>
+            </div>
+            <div class="section-b col">
+              <!-- <mat-label>Designation<span class="required">*</span></mat-label> -->
+              <input placeholder="Designation" class="input" type="text" name="Search"
+                matInput formControlName="designation" maxlength="50" required>
+              <mat-hint class="hintalign">{{form.get('designation').value?.length || 0}}/50
+              </mat-hint>
+              <mat-error *ngIf="submitted && form.get('designation')?.errors?.required">{{'Designation is required'}}</mat-error>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="section-b col">
+              <!-- <mat-label>Institution<span class="required">*</span></mat-label> -->
+              <mat-select  placeholder="Institution" formControlName="institution" >
+                <mat-option *ngFor="let row of instList" [value]="row._id">{{row.name}}</mat-option>
+              </mat-select>
+              <mat-error *ngIf="submitted && form.get('institution')?.errors?.required">{{'Institution is required'}}</mat-error>
+             </div>
+            <div class="section-b col">
+              <!-- <mat-label>Introduction<span class="required">*</span></mat-label> -->
+              <input class="input"  placeholder="Introduction" type="text"  name="Search"
+                matInput formControlName="introduction" maxlength="50" required>
+              <mat-hint class="hintalign">{{form.get('introduction').value?.length || 0}}/50
+              </mat-hint>
+              <mat-error *ngIf="submitted && form.get('introduction')?.errors?.required">{{'Introduction is required'}}</mat-error>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4" style="display: flex;justify-content: center;">
+          <div>
+            <div id="images">
+                <div id="main-img-holder">
+                    <img id="main-img" [src]="mainImageSrc" alt="main-img"
+                        style="width:310px;height:195px;border-radius: 10px;" />
+                    <div class="upload-icon-container">
+                        <label for="image-upload-input" class="upload-icon-label">
+                            <span class="cursor-pointer"><i style="color: white;"
+                                    class="fa fa-upload fa-2x"></i>
+                                <p style="color: white;margin: 10px;"  *ngIf="mainImageSrc.includes('noImg.png')">Upload Thumbnail</p>
+                            </span>
+                            <input type="file" accept="image/*" (change)="onFileChange($event)"
+                                #imageUploadInput id="image-upload-input" style="display:none">
+                        </label>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        </div>
+      </div>
+      <div class="disflex mt-5" *ngIf="!view">
+        <button mat-flat-button color="warn" (click)="discard()">{{'Discard' | uppercase}}</button>
+        <button mat-flat-button color="primary" type="submit" (click)="save()" *ngIf="!edit" [disabled]="isSave">{{'Save' | uppercase}}</button>
+        <button mat-flat-button color="primary" type="submit" (click)="save()" *ngIf="edit">{{'Update' |
+          uppercase}}</button>
+      </div>
+    </form>
+  </div>
+</div>

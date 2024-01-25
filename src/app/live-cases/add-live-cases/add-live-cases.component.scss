@@ -1,0 +1,130 @@
+#images {
+    height: 0;
+  }
+  
+  #main-img-holder {
+    max-width: 300px;
+    height: 300px;
+    margin-bottom: 10px;
+  }
+  
+  .merged-icon {
+    position: relative;
+    display: inline-block;
+  }
+  
+  hr.new4 {
+    border: 1px solid rgb(163, 119, 119);
+    margin-bottom: 15px;
+  }
+  
+  .merged-icon i:last-child {
+    position: absolute;
+    top: 0;
+    right: 0;
+  }
+  
+  .closeIcon {
+    position: absolute;
+    left: 4.2rem;
+    bottom: 6.5rem;
+  }
+  
+  #main-img {
+    object-fit: cover;
+    margin-bottom: 15px;
+    max-width: 340px;
+    width: 100%;
+    max-height: 300px;
+    height: 100%;
+  }
+  
+  #img-catalogue {
+    display: flex;
+    justify-content: center;
+  }
+  
+  .displayflx {
+    display: flex;
+    text-align: center;
+  }
+  
+  .sub-images:hover {
+    // border: 1px solid black;
+    cursor: pointer;
+  }
+  
+  .card {
+    background-color: #2E2E2E;
+    height: 90%;
+    border-radius: 10px;
+    // border: 1px solid #ddd;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+    padding: 1rem;
+    // text-align: center;
+  }
+  
+  mat-label .required {
+    color: red;
+  }
+  
+  .required-error {
+    border-color: red !important;
+  }
+  
+  .hintalign {
+    display: flex !important;
+    justify-content: end !important;
+  }
+  
+  .section-b {
+    // margin: 10px;
+  
+    .input {
+      padding: 10px;
+      border-radius: 10px;
+      background: #111111 !important;
+      color: #ffffff !important;
+      border: #111111 !important;
+      width: 100%;
+      line-height: 20px;
+      margin-top: 5px;
+      margin-bottom: 5px;
+    }
+  
+    ::ng-deep .mat-mdc-select-trigger {
+      border-radius: 10px;
+      background: #111111;
+      line-height: 17px;
+      padding: 8px;
+    }
+  
+    ::ng-deep .mat-mdc-select {
+      margin: 10px;
+    }
+  }
+  
+  .card-title {
+    display: flex;
+    align-items: center;
+    margin: 4px;
+  }
+  
+  .upload-icon-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  
+  .upload-icon-label {
+    display: block;
+    text-align: center;
+  }
+  
+  .disflex {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 10px;
+  }

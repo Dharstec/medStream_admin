@@ -1,0 +1,123 @@
+<div class="container">
+  <div class="card-title">
+    <i class="fa fa-arrow-left" style="font-size:20px;cursor: pointer;color: white;" routerLink="/institution/list"></i>&nbsp;&nbsp;
+    <h2 style="padding:0px !important ;margin:0px !important;font-weight: 600;color:white;font-size: 18px;
+    margin: 10px 0px 10px 0px !important;">Add
+      {{'Institution'}}</h2>
+  </div>
+  <div class="card">
+    <h4 style="padding:0px !important ;margin:0px !important;font-weight: 600;color: #f24c44;">{{'Institution Detail'}}</h4>
+<hr class="new4">
+    <form [formGroup]="form">
+
+      <div class="row">
+        <div class="col-md-8">
+          <div class="row">
+            <div class="section-b col">
+              <!-- <mat-label>Name<span class="required">*</span></mat-label> -->
+              <input placeholder="Name" class="input" type="text" name="Search" matInput formControlName="name" maxlength="50"
+                required>
+              <mat-hint class="hintalign">{{form.get('name').value?.length || 0}}/50
+              </mat-hint>
+              <mat-error *ngIf="submitted && form.get('name')?.errors?.required">{{'Name is required'}}</mat-error>
+            </div>
+            <div class="section-b col">
+              <!-- <mat-label>City<span class="required">*</span></mat-label> -->
+              <input placeholder="City" class="input" type="text" name="Search"
+                matInput formControlName="city" maxlength="50" required>
+              <mat-hint class="hintalign">{{form.get('city').value?.length || 0}}/50
+              </mat-hint>
+              <mat-error *ngIf="submitted && form.get('city')?.errors?.required">{{'City is required'}}</mat-error>
+            </div>
+          </div>
+
+          <div class="row">
+            <!-- <div class="section-b col">
+              <mat-label>Your Content <span class="required">*</span></mat-label>
+              <textarea class="input" matInput rows="3" cols="3" formControlName="yourContent" maxlength="250"></textarea>
+              <mat-hint class="hintalign">{{form.get('yourContent').value?.length || 0}}/250
+              </mat-hint>
+              <mat-error *ngIf="submitted && form.get('yourContent')?.errors?.required">{{'Type is required'}}
+              </mat-error>
+          </div> -->
+            <!-- <div class="section-b col">
+              <mat-select style="margin: 0  !important;"  placeholder="Institution" formControlName="institution" multiple>
+                <mat-option *ngFor="let row of city" [value]="row">{{row}}</mat-option>
+              </mat-select>
+              <mat-error *ngIf="submitted && form.get('institution')?.errors?.required">{{'Institution is required'}}</mat-error>
+             </div> -->
+            <div class="section-b col">
+              <input class="input"   placeholder="Country" type="text"  name="Search"
+                matInput formControlName="country" maxlength="50" required>
+              <mat-hint class="hintalign">{{form.get('country').value?.length || 0}}/50
+              </mat-hint>
+              <mat-error *ngIf="submitted && form.get('country')?.errors?.required">{{'Country is required'}}</mat-error>
+            </div>
+            <div class="section-b col">
+              <input class="input"  placeholder="Location" type="text"  name="Search"
+                matInput formControlName="location" maxlength="50" required>
+              <mat-hint class="hintalign">{{form.get('location').value?.length || 0}}/50
+              </mat-hint>
+              <mat-error *ngIf="submitted && form.get('location')?.errors?.required">{{'Location is required'}}</mat-error>
+            </div>
+          </div>
+          <div class="row">
+            <div class="section-b col">
+              <!-- <mat-label>Your Content <span class="required">*</span></mat-label> -->
+              <textarea class="input" matInput rows="3" cols="3" formControlName="description" placeholder="Description" maxlength="250"></textarea>
+              <mat-hint class="hintalign">{{form.get('description').value?.length || 0}}/250
+              </mat-hint>
+              <mat-error *ngIf="submitted && form.get('description')?.errors?.required">{{'Description is required'}}
+              </mat-error>
+          </div> 
+          <div class="section-b col">
+            <textarea class="input" matInput rows="3" cols="3" formControlName="address" placeholder="Address" maxlength="250"></textarea>
+            <mat-hint class="hintalign">{{form.get('address').value?.length || 0}}/250
+            </mat-hint>
+            <mat-error *ngIf="submitted && form.get('address')?.errors?.required">{{'Address is required'}}
+            </mat-error>
+        </div> 
+          </div>
+        </div>
+        <div class="col-md-4" style="display: flex;justify-content: center;">
+          <div>
+            <div id="images">
+                <div id="main-img-holder">
+                    <img id="main-img" [src]="mainImageSrc" alt="main-img"
+                        style="width:310px;height:270px;border-radius: 10px;margin-top:5px" />
+                    <div class="upload-icon-container">
+                        <label for="image-upload-input" class="upload-icon-label">
+                            <span class="cursor-pointer"><i style="color: white;"
+                                    class="fa fa-upload fa-2x"></i>
+                                <p style="color: white;margin: 10px;"  *ngIf="mainImageSrc.includes('noImg.png')">Upload Thumbnail</p>
+                            </span>
+                            <input type="file" accept="image/*" (change)="onFileChange($event)"
+                                #imageUploadInput id="image-upload-input" style="display:none">
+                        </label>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        </div>
+      </div>
+      <!-- <h4 style="padding:0px !important ;margin:0px !important;font-weight: 600;color: #f24c44;">{{'Operator Detail'}}</h4>
+      <hr class="new4">
+      <div class="row">
+          <div class="section-b col-4">
+            <mat-select style="margin: 0  !important;"  placeholder="Operator" formControlName="operator" multiple>
+              <mat-option *ngFor="let row of city" [value]="row">{{row}}</mat-option>
+            </mat-select>
+            <mat-error *ngIf="submitted && form.get('operator')?.errors?.required">{{'Operator is required'}}</mat-error>
+           </div>
+        <div class="col-6"></div>
+      </div> -->
+      <div class="disflex mt-5" *ngIf="!view">
+        <button mat-flat-button color="warn" (click)="discard()">{{'Discard' | uppercase}}</button>
+        <button mat-flat-button color="primary" type="submit" (click)="save()" *ngIf="!edit" [disabled]="isSave">{{'Save' | uppercase}}</button>
+        <button mat-flat-button color="primary" type="submit" (click)="save()" *ngIf="edit">{{'Update' |
+          uppercase}}</button>
+      </div>
+    </form>
+  </div>
+</div>
