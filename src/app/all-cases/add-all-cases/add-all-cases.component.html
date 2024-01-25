@@ -86,16 +86,14 @@
 <!-- Category Dropdown -->
             <div class="row">
                 <div class="section-b col-4">
-                    <mat-select style="margin: 0 !important;" placeholder="Category" formControlName="category">
+                    <mat-select style="margin: 0 !important;" placeholder="Category" formControlName="category" (selectionChange)="onCategoryChange()">
                         <mat-option *ngFor="let category of cat.category_list" [value]="category._id">{{ category.category }}</mat-option>
                     </mat-select>
                     <mat-error *ngIf="submitted && form.get('category')?.errors?.required">{{'Category is required'}}</mat-error>
                 </div>
                 <div class="section-b col-4">
                     <mat-select style="margin: 0 !important;" placeholder="Sub Category" formControlName="subCategory">
-                        <ng-container *ngFor="let category of cat.category_list">
-                            <mat-option *ngFor="let subCategory of category.subCategory" [value]="subCategory">{{ subCategory }}</mat-option>
-                          </ng-container>
+                            <mat-option *ngFor="let subCategory of filteredSubCategories" [value]="subCategory">{{ subCategory }}</mat-option>
                     </mat-select>
                     <mat-error *ngIf="submitted && form.get('subCategory')?.errors?.required">{{'Sub category is required'}}</mat-error>
                 </div>

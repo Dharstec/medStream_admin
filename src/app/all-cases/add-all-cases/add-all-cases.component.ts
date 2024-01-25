@@ -70,6 +70,8 @@ export class AddAllCasesComponent implements OnInit {
   getCategory(): void {
     this.api.apiGetCall('filters').subscribe((data) => {
       this.cat = data.data;
+      this.filteredSubCategories=[]
+
     })
   }
   generateRandomString(): string {
@@ -228,8 +230,7 @@ export class AddAllCasesComponent implements OnInit {
   onCategoryChange() {
     const selectedCategoryId = this.form.get('category')?.value;
     const selectedCategory = this.cat.category_list.find(category => category._id === selectedCategoryId);
-
-    if (selectedCategory) {
+    if (selectedCategory && selectedCategory.subCategory.length > 0) {
       this.filteredSubCategories = selectedCategory.subCategory;
     } else {
       this.filteredSubCategories = [];
