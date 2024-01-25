@@ -20,47 +20,12 @@ export class OperatorAddComponent implements OnInit {
   @ViewChild('fileInput') fileInput: ElementRef;
   videoSelect = false;
   mainImageSrc: string;
-  apiMainImageSrc: string;
-  images: Array<string> = [];
-  apiMainImages: Array<string> = [];
   video: string;
   apiVideoUrl: string;
   submitted = false;
   noImage = "assets/noImg.png"
-  types: string[] = [
-    "Male",
-    "Female",
-    "Neutral"
-  ];
-  category = [
-    "Anklets",
-    "Bracelets",
-    "Earrings",
-    "Necklace",
-    "Nose Pins",
-    "Pendant",
-    "Rings",
-    "Jewellery Set",
-    "Toe Rings"
-  ]
-  stone = [
-    'LOréal',
-    'Maybelline',
-    'MAC',
-    'Lakme',
-    'Wella',
-    'Toni & Guy',
-    'TRESemmé',
-    'Renee'
-  ]
-  color = [
-    "Gold", "Oxidised Silver", "Rose Gold", "Silver"
-  ]
   designation = [
     "Doctor", "Cardiologist", "Yoga Teacher", "Heart Specialist"
-  ]
-  collections = [
-    "Diwali", "New Year", "Mother's Day", "Christmas", "Raksha Bandhan", "Eid", "Holi", "Durga pooja", ""
   ]
   productId: string;
   edit = false;
@@ -70,6 +35,7 @@ export class OperatorAddComponent implements OnInit {
   operatorsDet: any;
   isSave = false;
   instList: any;
+  imageUpload: any
 
   constructor(private router: Router, private formBuilder: UntypedFormBuilder, private api: ApiService, private snackbar: MatSnackBar, private activeRoute: ActivatedRoute, private opeSer: OperatorService) {
 
@@ -105,6 +71,7 @@ export class OperatorAddComponent implements OnInit {
   allFiles: any;
   onFileChange(event: any) {
     const files = event.target.files;
+    this.imageUpload = files
     if (files.length > 0) {
       const file = files[0];
       if (file) {
@@ -146,7 +113,6 @@ export class OperatorAddComponent implements OnInit {
       designation: ['', Validators.required],
       introduction: ['', Validators.required],
       institution: ['', Validators.required],
-      // email: ['', Validators.required],
       fb: ['', Validators.required],
       insta: ['', Validators.required],
       x: ['', Validators.required],
@@ -177,57 +143,61 @@ export class OperatorAddComponent implements OnInit {
 
 
   save() {
-    // console.log("hi")
-    console.log(this.mainImageSrc)
     if (this.form.invalid) {
-      console.log("invalid form ",this.form.controls)
-      return
+      console.log("invalid form ", this.form.controls)
+      return this.snackbar.openFromComponent(SnackbarComponent, {
+        data: 'Enter the valid values',
+      });
     } else {
       console.log("valid form ")
-      // const formData = new FormData()
-      // formData.append('image', this.mainImageSrc)
-      // this.api.apiPostCall(formData, 'ImageUpload').subscribe(data => {
-      //   if (data.status === true) {
-      const payload:any = {
-        "name": this.form.controls['name'].value,
-        "institution": this.form.controls['institution'].value,
-        "designation": this.form.controls['designation'].value,
-        "introduction": this.form.controls['introduction'].value,
-        // "email": this.form.controls['email'].value,
-        "image": 'https://api.medstream360.com/image-1702994553888.jpeg',
-        "social_media_link":{"fb": this.form.controls['fb'].value,
-        "insta": this.form.controls['insta'].value,
-        "x": this.form.controls['x'].value,
-        "li": this.form.controls['li'].value}
-      }
-
-      console.log("payload",payload)
-      if (!this.productId) {
-
-        this.api.apiPostCall(payload, 'operator').subscribe(data => {
-
-          if (data.status == true) {
-            this.snackbar.openFromComponent(SnackbarComponent, {
-              data: 'Successfully Saved',
-            });
-            this.router.navigate(['/operator/list'])
+      const formData = new FormData()
+      formData.append('image', this.imageUpload[0])
+      this.api.apiPostCall(formData, 'ImageUpload').subscribe(data => {
+        if (data.status === true) {
+          const payload: any = {
+            "name": this.form.controls['name'].value,
+            "institution": this.form.controls['institution'].value,
+            "designation": this.form.controls['designation'].value,
+            "introduction": this.form.controls['introduction'].value,
+            "image": data.Image,
+            "social_media_link": {
+              "fb": this.form.controls['fb'].value,
+              "insta": this.form.controls['insta'].value,
+              "x": this.form.controls['x'].value,
+              "li": this.form.controls['li'].value
+            }
           }
-        })
-      } else {
-        payload.password='password123'
-        this.api.apiPutCall(payload, 'operator' +'/'+ this.productId).subscribe(data => {
-          if (data.status == true) {
-            this.snackbar.openFromComponent(SnackbarComponent, {
-              data: 'Successfully Updated',
-            });
-            this.router.navigate(['/operator/list'])
-          }
-        })
-      }
 
-      console.log(payload)
-      // }
-      // })
+          console.log("payload", payload)
+          if (!this.productId) {
+
+            this.api.apiPostCall(payload, 'operator').subscribe(data => {
+
+              if (data.status == true) {
+                this.snackbar.openFromComponent(SnackbarComponent, {
+                  data: 'Successfully Saved',
+                });
+                this.router.navigate(['/operator/list'])
+              }
+            })
+          } else {
+            this.api.apiPutCall(payload, 'operator' + '/' + this.productId).subscribe(data => {
+              if (data.status == true) {
+                this.snackbar.openFromComponent(SnackbarComponent, {
+                  data: 'Successfully Updated',
+                });
+                this.router.navigate(['/operator/list'])
+              }
+            })
+          }
+        } else {
+          this.snackbar.openFromComponent(SnackbarComponent, {
+            data: 'Failed to upload image',
+          });
+        }
+      })
+
+
 
     }
   }
