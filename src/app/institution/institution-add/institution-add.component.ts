@@ -11,7 +11,7 @@ import { SnackbarComponent } from 'src/app/shared-module/snackbar/snackbar.compo
   templateUrl: './institution-add.component.html',
   styleUrls: ['./institution-add.component.scss']
 })
-export class InstitutionAddComponent  implements OnInit {
+export class InstitutionAddComponent implements OnInit {
   form: FormGroup;
   editproduct: any;
   productview = false;
@@ -27,41 +27,6 @@ export class InstitutionAddComponent  implements OnInit {
   apiVideoUrl: string;
   submitted = false;
   noImage = "assets/noImg.png"
-  types: string[] = [
-    "Male",
-    "Female",
-    "Neutral"
-  ];
-  category = [
-    "Anklets",
-    "Bracelets",
-    "Earrings",
-    "Necklace",
-    "Nose Pins",
-    "Pendant",
-    "Rings",
-    "Jewellery Set",
-    "Toe Rings"
-  ]
-  stone = [
-    'LOréal',
-    'Maybelline',
-    'MAC',
-    'Lakme',
-    'Wella',
-    'Toni & Guy',
-    'TRESemmé',
-    'Renee'
-  ]
-  color = [
-    "Gold", "Oxidised Silver", "Rose Gold", "Silver"
-  ]
-  city = [
-    "Doctor", "Cardiologist", "Yoga Teacher", "Heart Specialist"
-  ]
-  collections = [
-    "Diwali", "New Year", "Mother's Day", "Christmas", "Raksha Bandhan", "Eid", "Holi", "Durga pooja", ""
-  ]
   productId: string;
   edit = false;
   view = false;
@@ -69,9 +34,10 @@ export class InstitutionAddComponent  implements OnInit {
   result: any;
   productDetails: any;
   isSave = false;
+  imageUpload: any
 
-  constructor(private router: Router, private formBuilder: UntypedFormBuilder, private api: ApiService, private snackbar: MatSnackBar, private activeRoute: ActivatedRoute,private insSer:InstitutionService) {
-     }
+  constructor(private router: Router, private formBuilder: UntypedFormBuilder, private api: ApiService, private snackbar: MatSnackBar, private activeRoute: ActivatedRoute, private insSer: InstitutionService) {
+  }
 
   ngOnInit(): void {
     this.initializeForm();
@@ -82,21 +48,22 @@ export class InstitutionAddComponent  implements OnInit {
 
 
   getInstitutionDet(data) {
-      this.productDetails = data;
-      this.mainImageSrc = data.image;
-      this.form.controls['name'].setValue(this.productDetails.name);
-      this.form.controls['city'].setValue(this.productDetails.city);
-      this.form.controls['country'].setValue(this.productDetails.country);
-      this.form.controls['location'].setValue(this.productDetails.location);
-      this.form.controls['description'].setValue(this.productDetails.description);
-      this.form.controls['address'].setValue(this.productDetails.address);
-        if (this.router.url.includes('view')) {
-        this.form.disable();
-      }
+    this.productDetails = data;
+    this.mainImageSrc = data.image;
+    this.form.controls['name'].setValue(this.productDetails.name);
+    this.form.controls['city'].setValue(this.productDetails.city);
+    this.form.controls['country'].setValue(this.productDetails.country);
+    this.form.controls['location'].setValue(this.productDetails.location);
+    this.form.controls['description'].setValue(this.productDetails.description);
+    this.form.controls['address'].setValue(this.productDetails.address);
+    if (this.router.url.includes('view')) {
+      this.form.disable();
+    }
   }
   allFiles: any;
   onFileChange(event: any) {
     const files = event.target.files;
+    this.imageUpload = files
     if (files.length > 0) {
       const file = files[0];
       if (file) {
@@ -162,45 +129,49 @@ export class InstitutionAddComponent  implements OnInit {
 
   save() {
     if (this.form.invalid) {
-      return
+      return this.snackbar.openFromComponent(SnackbarComponent, {
+        data: 'Enter the valid values',
+      });
     } else {
       const formData = new FormData()
-      formData.append('image', this.mainImageSrc)
+      formData.append('image', this.imageUpload[0])
       this.api.apiPostCall(formData, 'ImageUpload').subscribe(data => {
         if (data.status === true) {
-      const payload = {
-        "name": this.form.controls['name'].value,
-        "city": this.form.controls['city'].value,
-        "country": this.form.controls['country'].value,
-        // "image": 'https://api.medstream360.com/image-1702999237801.png',
-        "image": this.mainImageSrc,
-        "location": this.form.controls['location'].value,
-        "description": this.form.controls['description'].value,
-        "address": this.form.controls['address'].value,
-      }
-
-      if (!this.productId) {
-        this.api.apiPostCall(payload, 'institute').subscribe(data => {
-          if (data.status == true) {
-            this.snackbar.openFromComponent(SnackbarComponent, {
-              data: 'Successfully Saved',
-            });
-            this.router.navigate(['/institution/list'])
+          const payload = {
+            "name": this.form.controls['name'].value,
+            "city": this.form.controls['city'].value,
+            "country": this.form.controls['country'].value,
+            "image": data.Image,
+            "location": this.form.controls['location'].value,
+            "description": this.form.controls['description'].value,
+            "address": this.form.controls['address'].value,
           }
-        })
-      } else {
-        this.api.apiPutCall(payload, 'institute' +'/'+ this.productId).subscribe(data => {
-          if (data.status == true) {
-            this.snackbar.openFromComponent(SnackbarComponent, {
-              data: 'Successfully Updated',
-            });
-            this.router.navigate(['/institution/list'])
-          }
-        })
-      }
 
-      console.log(payload)
-      }
+          if (!this.productId) {
+            this.api.apiPostCall(payload, 'institute').subscribe(data => {
+              if (data.status == true) {
+                this.snackbar.openFromComponent(SnackbarComponent, {
+                  data: 'Successfully Saved',
+                });
+                this.router.navigate(['/institution/list'])
+              }
+            })
+          } else {
+            this.api.apiPutCall(payload, 'institute' + '/' + this.productId).subscribe(data => {
+              if (data.status == true) {
+                this.snackbar.openFromComponent(SnackbarComponent, {
+                  data: 'Successfully Updated',
+                });
+                this.router.navigate(['/institution/list'])
+              }
+            })
+          }
+        }
+        else {
+          this.snackbar.openFromComponent(SnackbarComponent, {
+            data: 'Failed to upload image',
+          });
+        }
       })
 
     }

@@ -36,6 +36,7 @@ export class AddLiveCasesComponent implements OnInit {
   result: any;
   productDetails: any;
   isSave = false;
+  imageUpload: any
 
   constructor(private router: Router, private formBuilder: UntypedFormBuilder, private api: ApiService, private snackbar: MatSnackBar, private activeRoute: ActivatedRoute, private liveSer: LiveCasesService) {
 
@@ -66,6 +67,7 @@ export class AddLiveCasesComponent implements OnInit {
   allFiles: any;
   onFileChange(event: any) {
     const files = event.target.files;
+    this.imageUpload = files
     if (files.length > 0) {
       const file = files[0];
       if (file) {
@@ -151,17 +153,19 @@ export class AddLiveCasesComponent implements OnInit {
   save() {
 
     if (this.form.invalid) {
-      return
+      return this.snackbar.openFromComponent(SnackbarComponent, {
+        data: 'Enter the valid values',
+      });
     } else {
-      // const formData = new FormData()
-      // formData.append('image', this.mainImageSrc)
-      // this.api.apiPostCall(formData, 'ImageUpload').subscribe(data => {
-      //   if (data.status === true) {
+      const formData = new FormData()
+      formData.append('image',  this.imageUpload[0])
+      this.api.apiPostCall(formData, 'ImageUpload').subscribe(data => {
+        if (data.status === true) {
       const payload = {
         "title": this.form.controls['title'].value,
         "youtubeUrl": this.form.controls['youtubeUrl'].value,
         "desciription": this.form.controls['desciription'].value,
-        "thumbnail": 'https://api.medstream360.com/image-1702999237801.png',
+        "thumbnail":  data.Image,
         "category": this.form.controls['category'].value,
         "subCategory": this.form.controls['subCategory'].value,
         "institution": this.form.controls['institution'].value,
@@ -189,10 +193,12 @@ export class AddLiveCasesComponent implements OnInit {
           }
         })
       }
-
-      console.log(payload)
-      // }
-      // })
+      } else {
+        this.snackbar.openFromComponent(SnackbarComponent, {
+          data: 'Failed to upload image',
+        });
+      }
+      })
 
     }
 
