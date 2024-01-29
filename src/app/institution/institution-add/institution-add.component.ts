@@ -69,6 +69,7 @@ export class InstitutionAddComponent  implements OnInit {
   result: any;
   productDetails: any;
   isSave = false;
+  imageUpload :any;
 
   constructor(private router: Router, private formBuilder: UntypedFormBuilder, private api: ApiService, private snackbar: MatSnackBar, private activeRoute: ActivatedRoute,private insSer:InstitutionService) {
      }
@@ -95,8 +96,18 @@ export class InstitutionAddComponent  implements OnInit {
       }
   }
   allFiles: any;
+  // onFileChange(event: any) {
+  //   const files = event.target.files;
+  //   if (files.length > 0) {
+  //     const file = files[0];
+  //     if (file) {
+  //       this.handleImageUpload(file);
+  //     }
+  //   }
+  // }
   onFileChange(event: any) {
     const files = event.target.files;
+    this.imageUpload = files
     if (files.length > 0) {
       const file = files[0];
       if (file) {
@@ -162,10 +173,15 @@ export class InstitutionAddComponent  implements OnInit {
 
   save() {
     if (this.form.invalid) {
-      return
+      console.log("invalid form ", this.form.controls)
+      return this.snackbar.openFromComponent(SnackbarComponent, {
+        data: 'Enter the valid values',
+      });
+      // return
     } else {
+      console.log("valid form ")
       const formData = new FormData()
-      formData.append('image', this.mainImageSrc)
+      formData.append('image', this.imageUpload[0])
       this.api.apiPostCall(formData, 'ImageUpload').subscribe(data => {
         if (data.status === true) {
       const payload = {
@@ -200,6 +216,12 @@ export class InstitutionAddComponent  implements OnInit {
       }
 
       console.log(payload)
+      } 
+      // added
+      else {
+        this.snackbar.openFromComponent(SnackbarComponent, {
+          data: 'Failed to upload image',
+        });
       }
       })
 

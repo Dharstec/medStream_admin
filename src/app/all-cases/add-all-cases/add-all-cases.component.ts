@@ -43,6 +43,7 @@ export class AddAllCasesComponent implements OnInit {
   category:any;
   filteredSubCategories: string[] = [];
   cat: any = {};
+  imageUpload :any;
 
   constructor(private router: Router, private formBuilder: UntypedFormBuilder, private api: ApiService, private snackbar: MatSnackBar, private activeRoute: ActivatedRoute, private allSer: AllCasesService) {
   }
@@ -91,6 +92,7 @@ export class AddAllCasesComponent implements OnInit {
   allFiles: any;
   onFileChange(event: any) {
     const files = event.target.files;
+    this.imageUpload = files
     if (files.length > 0) {
       const file = files[0];
       if (file) {
@@ -149,7 +151,8 @@ export class AddAllCasesComponent implements OnInit {
 
   getProductDetails(data) {
     this.productDetails = data;
-    this.mainImageSrc = data.thumbnail;
+    // this.mainImageSrc = data.thumbnail;
+    this.mainImageSrc = data.image;
     this.form.controls['title'].setValue(this.productDetails.title);
     this.form.controls['youtubeUrl'].setValue(this.productDetails.youtubeUrl);
     this.form.controls['desciription'].setValue(this.productDetails.desciription);
@@ -174,14 +177,20 @@ export class AddAllCasesComponent implements OnInit {
     this.router.navigate(['/allCases/list'])
   }
 
-
+  
   save() {
 
     if (this.form.invalid) {
-      return
+      console.log("invalid form ", this.form.controls)
+      return this.snackbar.openFromComponent(SnackbarComponent, {
+        data: 'Enter the valid values',
+      });
+      // return
     } else {
+
+      console.log("valid form ")
       const formData = new FormData()
-      formData.append('image', this.mainImageSrc)
+      formData.append('image', this.imageUpload[0])
       this.api.apiPostCall(formData, 'ImageUpload').subscribe(data => {
         if (data.status === true) {
       const payload = {
@@ -191,7 +200,7 @@ export class AddAllCasesComponent implements OnInit {
         // "filepath": 'https://api.medstream360.com/image-1702999237801.png',
         // "thumbnail": 'https://api.medstream360.com/image-1702999237801.png',
         "filepath": this.mainImageSrc,
-        // "thumbnail": this.mainImageSrc,
+        "thumbnail": this.mainImageSrc,
         "category": this.form.controls['category'].value,
         "subCategory": this.form.controls['subCategory'].value,
         "institution": this.form.controls['institution'].value,
@@ -222,6 +231,12 @@ export class AddAllCasesComponent implements OnInit {
 
       console.log(payload)
       // comment out
+      }
+      // added
+      else {
+        this.snackbar.openFromComponent(SnackbarComponent, {
+          data: 'Failed to upload image',
+        });
       }
       })
     }
