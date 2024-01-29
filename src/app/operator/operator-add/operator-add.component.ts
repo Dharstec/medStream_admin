@@ -144,7 +144,7 @@ export class OperatorAddComponent implements OnInit {
 
   save() {
     if (this.form.invalid) {
-      console.log("invalid form ", this.form.controls)
+      // console.log("invalid form ", this.form.controls)
       return this.snackbar.openFromComponent(SnackbarComponent, {
         data: 'Enter the valid values',
       });
@@ -167,8 +167,6 @@ export class OperatorAddComponent implements OnInit {
               "li": this.form.controls['li'].value
             }
           }
-
-          console.log("payload", payload)
           if (!this.productId) {
 
             this.api.apiPostCall(payload, 'operator').subscribe(data => {
