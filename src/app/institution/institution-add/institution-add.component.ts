@@ -34,7 +34,9 @@ export class InstitutionAddComponent implements OnInit {
   result: any;
   productDetails: any;
   isSave = false;
+  imageUpload :any;
 
+  
   constructor(private router: Router, private formBuilder: UntypedFormBuilder, private api: ApiService, private snackbar: MatSnackBar, private activeRoute: ActivatedRoute, private insSer: InstitutionService) {
   }
 

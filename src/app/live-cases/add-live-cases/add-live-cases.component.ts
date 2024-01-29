@@ -36,6 +36,13 @@ export class AddLiveCasesComponent implements OnInit {
   result: any;
   productDetails: any;
   isSave = false;
+  instList :any;
+  ops:any;
+  // cat:any;
+  category:any;
+  filteredSubCategories: string[] = [];
+  cat: any = {};
+  imageUpload :any;
 
   constructor(private router: Router, private formBuilder: UntypedFormBuilder, private api: ApiService, private snackbar: MatSnackBar, private activeRoute: ActivatedRoute, private liveSer: LiveCasesService) {
 
@@ -217,6 +224,37 @@ export class AddLiveCasesComponent implements OnInit {
 
     }
 
+  }
+  onCategoryChange() {
+    const selectedCategoryId = this.form.get('category')?.value;
+    const selectedCategory = this.cat.category_list.find(category => category._id === selectedCategoryId);
+    if (selectedCategory && selectedCategory.subCategory.length > 0) {
+      this.filteredSubCategories = selectedCategory.subCategory;
+    } else {
+      this.filteredSubCategories = [];
+    }
+  }
+
+  // ///////////////////
+  onInstitutionChange(): void {
+    const selectedInstitutionId = this.form.get('institution')?.value;
+    const selectedInstitution = this.instList.find((institution: any) => institution._id === selectedInstitutionId);
+  
+    if (selectedInstitution) {
+      // Fetch operators based on the selected institution and update the ops array
+      this.getOperatorsForInstitution(selectedInstitutionId);
+    } else {
+      // Reset the ops array or take any other appropriate action
+      this.ops = [];
+    }
+  }
+  getOperatorsForInstitution(institutionId: string): void {
+    // Call your API to get operators based on the selected institution
+    // Update the ops array with the fetched operators
+    // Example:
+    this.api.apiGetCall(`operators?institution=${institutionId}`).subscribe((data) => {
+      this.ops = data.data;
+    });
   }
 
 }
