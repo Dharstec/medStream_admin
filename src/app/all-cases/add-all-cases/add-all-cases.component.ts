@@ -43,7 +43,7 @@ export class AddAllCasesComponent implements OnInit {
   category:any;
   filteredSubCategories: string[] = [];
   cat: any = {};
-  imageUpload: any
+  imageUpload :any;
 
   constructor(private router: Router, private formBuilder: UntypedFormBuilder, private api: ApiService, private snackbar: MatSnackBar, private activeRoute: ActivatedRoute, private allSer: AllCasesService) {
   }
@@ -152,6 +152,7 @@ export class AddAllCasesComponent implements OnInit {
   getProductDetails(data) {
     this.productDetails = data;
     this.mainImageSrc = data.thumbnail;
+    this.mainImageSrc = data.image;
     this.form.controls['title'].setValue(this.productDetails.title);
     this.form.controls['youtubeUrl'].setValue(this.productDetails.youtubeUrl);
     this.form.controls['desciription'].setValue(this.productDetails.desciription);
@@ -176,14 +177,18 @@ export class AddAllCasesComponent implements OnInit {
     this.router.navigate(['/allCases/list'])
   }
 
-
+  
   save() {
 
     if (this.form.invalid) {
+      console.log("invalid form ", this.form.controls)
       return this.snackbar.openFromComponent(SnackbarComponent, {
         data: 'Enter the valid values',
       });
+      // return
     } else {
+
+      console.log("valid form ")
       const formData = new FormData()
       formData.append('image', this.imageUpload[0])
       this.api.apiPostCall(formData, 'ImageUpload').subscribe(data => {
@@ -194,8 +199,8 @@ export class AddAllCasesComponent implements OnInit {
         "desciription": this.form.controls['desciription'].value,
         // "filepath": 'https://api.medstream360.com/image-1702999237801.png',
         // "thumbnail": 'https://api.medstream360.com/image-1702999237801.png',
-        "filepath": data.Image,
-        "thumbnail": data.Image,
+        "filepath": this.mainImageSrc,
+        "thumbnail": this.mainImageSrc,
         "category": this.form.controls['category'].value,
         "subCategory": this.form.controls['subCategory'].value,
         "institution": this.form.controls['institution'].value,

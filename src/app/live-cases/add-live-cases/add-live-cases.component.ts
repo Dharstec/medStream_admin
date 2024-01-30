@@ -36,18 +36,44 @@ export class AddLiveCasesComponent implements OnInit {
   result: any;
   productDetails: any;
   isSave = false;
-  imageUpload: any
+  instList :any;
+  ops:any;
+  // cat:any;
+  category:any;
+  filteredSubCategories: string[] = [];
+  cat: any = {};
+  imageUpload :any;
 
   constructor(private router: Router, private formBuilder: UntypedFormBuilder, private api: ApiService, private snackbar: MatSnackBar, private activeRoute: ActivatedRoute, private liveSer: LiveCasesService) {
 
   }
 
   ngOnInit(): void {
+    this.getCategory();
+    this.getOperator();
+    this.getInstitutionList();
     this.initializeForm();
     if (!this.productId) {
       this.mainImageSrc = this.noImage;
       this.generateRandomString();
     }
+  }
+  getInstitutionList(): void {
+    this.api.apiGetCall('institute').subscribe((data) => {
+      this.instList = data.data;
+    })
+  }
+  getOperator(): void {
+    this.api.apiGetCall('operator').subscribe((data) => {
+      this.ops = data.data;
+    })
+  }
+  getCategory(): void {
+    this.api.apiGetCall('filters').subscribe((data) => {
+      this.cat = data.data;
+      this.filteredSubCategories=[]
+
+    })
   }
 
   generateRandomString(): string {
@@ -125,7 +151,8 @@ export class AddLiveCasesComponent implements OnInit {
 
   getProductDetails(data) {
     this.productDetails = data;
-    this.mainImageSrc = data.thumbnail;
+    // this.mainImageSrc = data.thumbnail;
+    this.mainImageSrc = data.image;
     this.form.controls['title'].setValue(this.productDetails.title);
     this.form.controls['youtubeUrl'].setValue(this.productDetails.youtubeUrl);
     this.form.controls['desciription'].setValue(this.productDetails.desciription);
@@ -151,21 +178,18 @@ export class AddLiveCasesComponent implements OnInit {
 
 
   save() {
-
     if (this.form.invalid) {
-      return this.snackbar.openFromComponent(SnackbarComponent, {
-        data: 'Enter the valid values',
-      });
+      return
     } else {
-      const formData = new FormData()
-      formData.append('image',  this.imageUpload[0])
-      this.api.apiPostCall(formData, 'ImageUpload').subscribe(data => {
-        if (data.status === true) {
+      // const formData = new FormData()
+      // formData.append('image', this.mainImageSrc)
+      // this.api.apiPostCall(formData, 'ImageUpload').subscribe(data => {
+      //   if (data.status === true) {
       const payload = {
         "title": this.form.controls['title'].value,
         "youtubeUrl": this.form.controls['youtubeUrl'].value,
         "desciription": this.form.controls['desciription'].value,
-        "thumbnail":  data.Image,
+        "thumbnail": 'https://api.medstream360.com/image-1702999237801.png',
         "category": this.form.controls['category'].value,
         "subCategory": this.form.controls['subCategory'].value,
         "institution": this.form.controls['institution'].value,
@@ -193,15 +217,44 @@ export class AddLiveCasesComponent implements OnInit {
           }
         })
       }
-      } else {
-        this.snackbar.openFromComponent(SnackbarComponent, {
-          data: 'Failed to upload image',
-        });
-      }
-      })
+
+      console.log(payload)
+      // }
+      // })
 
     }
 
+  }
+  onCategoryChange() {
+    const selectedCategoryId = this.form.get('category')?.value;
+    const selectedCategory = this.cat.category_list.find(category => category._id === selectedCategoryId);
+    if (selectedCategory && selectedCategory.subCategory.length > 0) {
+      this.filteredSubCategories = selectedCategory.subCategory;
+    } else {
+      this.filteredSubCategories = [];
+    }
+  }
+
+  // ///////////////////
+  onInstitutionChange(): void {
+    const selectedInstitutionId = this.form.get('institution')?.value;
+    const selectedInstitution = this.instList.find((institution: any) => institution._id === selectedInstitutionId);
+  
+    if (selectedInstitution) {
+      // Fetch operators based on the selected institution and update the ops array
+      this.getOperatorsForInstitution(selectedInstitutionId);
+    } else {
+      // Reset the ops array or take any other appropriate action
+      this.ops = [];
+    }
+  }
+  getOperatorsForInstitution(institutionId: string): void {
+    // Call your API to get operators based on the selected institution
+    // Update the ops array with the fetched operators
+    // Example:
+    this.api.apiGetCall(`operators?institution=${institutionId}`).subscribe((data) => {
+      this.ops = data.data;
+    });
   }
 
 }

@@ -34,8 +34,9 @@ export class InstitutionAddComponent implements OnInit {
   result: any;
   productDetails: any;
   isSave = false;
-  imageUpload: any
+  imageUpload :any;
 
+  
   constructor(private router: Router, private formBuilder: UntypedFormBuilder, private api: ApiService, private snackbar: MatSnackBar, private activeRoute: ActivatedRoute, private insSer: InstitutionService) {
   }
 
@@ -61,6 +62,15 @@ export class InstitutionAddComponent implements OnInit {
     }
   }
   allFiles: any;
+  // onFileChange(event: any) {
+  //   const files = event.target.files;
+  //   if (files.length > 0) {
+  //     const file = files[0];
+  //     if (file) {
+  //       this.handleImageUpload(file);
+  //     }
+  //   }
+  // }
   onFileChange(event: any) {
     const files = event.target.files;
     this.imageUpload = files
@@ -129,10 +139,9 @@ export class InstitutionAddComponent implements OnInit {
 
   save() {
     if (this.form.invalid) {
-      return this.snackbar.openFromComponent(SnackbarComponent, {
-        data: 'Enter the valid values',
-      });
+      return
     } else {
+      console.log("valid form ")
       const formData = new FormData()
       formData.append('image', this.imageUpload[0])
       this.api.apiPostCall(formData, 'ImageUpload').subscribe(data => {
@@ -147,31 +156,28 @@ export class InstitutionAddComponent implements OnInit {
             "address": this.form.controls['address'].value,
           }
 
-          if (!this.productId) {
-            this.api.apiPostCall(payload, 'institute').subscribe(data => {
-              if (data.status == true) {
-                this.snackbar.openFromComponent(SnackbarComponent, {
-                  data: 'Successfully Saved',
-                });
-                this.router.navigate(['/institution/list'])
-              }
-            })
-          } else {
-            this.api.apiPutCall(payload, 'institute' + '/' + this.productId).subscribe(data => {
-              if (data.status == true) {
-                this.snackbar.openFromComponent(SnackbarComponent, {
-                  data: 'Successfully Updated',
-                });
-                this.router.navigate(['/institution/list'])
-              }
-            })
+      if (!this.productId) {
+        this.api.apiPostCall(payload, 'institute').subscribe(data => {
+          if (data.status == true) {
+            this.snackbar.openFromComponent(SnackbarComponent, {
+              data: 'Successfully Saved',
+            });
+            this.router.navigate(['/institution/list'])
           }
-        }
-        else {
-          this.snackbar.openFromComponent(SnackbarComponent, {
-            data: 'Failed to upload image',
-          });
-        }
+        })
+      } else {
+        this.api.apiPutCall(payload, 'institute' +'/'+ this.productId).subscribe(data => {
+          if (data.status == true) {
+            this.snackbar.openFromComponent(SnackbarComponent, {
+              data: 'Successfully Updated',
+            });
+            this.router.navigate(['/institution/list'])
+          }
+        })
+      }
+
+      console.log(payload)
+      }
       })
 
     }

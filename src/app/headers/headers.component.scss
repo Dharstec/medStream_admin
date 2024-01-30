@@ -17,7 +17,7 @@
         align-items: center;
         justify-content: space-between;
 
-        .head-content-left {}
+        // .head-content-left {}
 
         .head-content-right {
             display: flex;
@@ -156,8 +156,25 @@
 }
 
 .matMenu {
+    width: 200px;
     display: flex;
+    flex-direction: column;
     justify-content: space-between;
-    padding: 2px 15px 2px 15px;
+    // padding: 2px 15px 2px 15px;
+    padding: 20px;
     cursor: pointer;
+    row-gap: 10px;
 }
+.row {
+    display: flex;
+    align-items: center;
+  }
+  
+  .user-info {
+    margin-top: 5px;
+  }
+  
+  mat-icon {
+    margin-right: 5px;
+  }
+  
