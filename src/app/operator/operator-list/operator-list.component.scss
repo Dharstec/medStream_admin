@@ -32,8 +32,14 @@
     box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
     padding: 5px;
     text-align: center;
-    margin: 10px;
-   
+    margin: 10px; 
+  }
+
+  .table_list{
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+    width: 100%;
   }
   
   .disFlex {
@@ -102,6 +108,7 @@
             cursor: pointer;
         }
     }
+
   
     .circle-indicator {
         width: 8px;

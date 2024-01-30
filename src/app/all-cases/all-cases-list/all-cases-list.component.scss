@@ -25,7 +25,6 @@
 }
 
 .card {
-  overflow: auto;
 background-color: #2E2E2E;
 height: 90%;
   border-radius: 10px;
@@ -34,7 +33,17 @@ height: 90%;
   padding: 5px;
   text-align: center;
   margin: 10px;
- 
+}
+
+.table_list{
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
+  width: 100%;
+}
+
+.overflow_auto{
+  overflow: auto !important;
 }
 
 .disFlex {

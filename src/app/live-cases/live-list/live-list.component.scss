@@ -9,6 +9,13 @@
   line-height: 24px;
 }
 
+.table_list{
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
+  width: 100%;
+}
+
 .add-coupon {
   font-size: 16px;
 

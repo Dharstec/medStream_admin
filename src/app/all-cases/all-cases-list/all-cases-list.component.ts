@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTableDataSource } from '@angular/material/table';
@@ -7,6 +7,13 @@ import { ApiService } from 'src/app/services/api.service';
 import { ConfirmDialogComponent } from 'src/app/shared-module/confirm-dialog/confirm-dialog.component';
 import { SnackbarComponent } from 'src/app/shared-module/snackbar/snackbar.component';
 import { AllCasesService } from '../all-cases.service';
+import * as moment from 'moment';
+import {
+  MatPaginator
+} from '@angular/material/paginator';
+import {
+  MediaMatcher
+} from '@angular/cdk/layout';
 
 @Component({
   selector: 'app-all-cases-list',
@@ -14,7 +21,9 @@ import { AllCasesService } from '../all-cases.service';
   styleUrls: ['./all-cases-list.component.scss']
 })
 export class AllCasesListComponent implements OnInit {
-  dataSource = new MatTableDataSource<any>([]);
+  dataSource = new MatTableDataSource<any>();
+  @ViewChild(MatPaginator) allCasePaginations: MatPaginator;
+  mobileQuery: MediaQueryList;
   columnsToDisplay = ['s.no', 'title', 'category', 'subCategory', 'inst', 'week', 'month', 'action'];
   selectedValue: any;
   selectedColourValue: any;
@@ -23,8 +32,17 @@ export class AllCasesListComponent implements OnInit {
   allCases: any;
   originalData: any[];
   noData = false;
+  pageSize: number=5;
 
-  constructor(private api: ApiService, public dialog: MatDialog, private snackbar: MatSnackBar, private router: Router, private allSer: AllCasesService) { }
+  constructor(private api: ApiService, public dialog: MatDialog, private snackbar: MatSnackBar,
+    private media: MediaMatcher, private router: Router, private allSer: AllCasesService) {
+    this.mobileQuery = media.matchMedia('(min-width: 1200px)');
+    if (this.mobileQuery.matches) {
+      this.pageSize = 5;
+    } else {
+      this.pageSize = 5;
+    }
+   }
 
   ngOnInit(): void {
     this.getLiveCasesList();
@@ -38,12 +56,22 @@ export class AllCasesListComponent implements OnInit {
   getLiveCasesList(): void {
     this.api.apiGetCall('allcase').subscribe((data) => {
       this.allCases = data.data;
+      this.dataSource = new MatTableDataSource(this.allCases);
       this.dataSource.data = data.data.sort((a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt));
-      if (!data.data?.length) {
+      this.dataSource.paginator = this.allCasePaginations;
+      // this.dataSource.data.map(e=>{
+      //   e['monthYear'] = e.createdAt ? moment(e.createdAt).format("MMM-YY") : '-'
+      //   e['week'] = e.createdAt ? moment(e.createdAt).format("WW") : '-'
+      // })
+      if (!this.allCases?.length) {
+        this.dataSource = new MatTableDataSource([]);
         this.noData = true;
       }
     })
   }
+  // ngAfterViewInit() {
+  //   this.dataSource.paginator = this.allCasePaginations;
+  // }
 
   delete(id: string): void {
     const dialog = this.dialog.open(ConfirmDialogComponent, {
@@ -69,6 +97,8 @@ export class AllCasesListComponent implements OnInit {
 
   applyFilter(filterValue: string) {
     this.dataSource.filter = filterValue.trim().toLowerCase();
+    this.noData = this.dataSource.filteredData.length ? false : true
+    // this.allCasePaginations.length=this.dataSource.filter.length
   }
 
   applyTypeFilter() {

@@ -36,6 +36,13 @@ height: 90%;
  
 }
 
+.table_list{
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
+  width: 100%;
+}
+
 .disFlex {
   display: flex;
   flex-direction: row;

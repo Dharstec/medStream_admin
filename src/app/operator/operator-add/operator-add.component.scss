@@ -48,6 +48,12 @@
     // border: 1px solid black;
     cursor: pointer;
   }
+  .table_list{
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+    width: 100%;
+  }
   
   .card {
     background-color: #2E2E2E;
