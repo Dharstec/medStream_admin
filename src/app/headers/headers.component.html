@@ -49,15 +49,15 @@
                     </div>
                     <mat-menu #menu="matMenu">
                         <div class="matMenu">
-                              <div class="user-info row">
+                              <!-- <div class="user-info row">
                                 <mat-icon>person</mat-icon><span>userName</span>
-                              </div>
+                              </div> -->
                               <div class="user-info row">
-                                <mat-icon>access_time</mat-icon><span>userTimezone</span>
+                                <mat-icon>email</mat-icon><span>{{userData.email}}</span>
                               </div>
-                              <div class="user-info row">
-                                <mat-icon>email</mat-icon><span>userEmail</span>
-                              </div>
+                              <!-- <div class="user-info row">
+                                <mat-icon>access_time</mat-icon><span>{{userData.region}}</span>
+                              </div> -->
                               <div class="row" (click)="logout()">
                                 <mat-icon>logout</mat-icon><span>Logout</span>
                               </div>

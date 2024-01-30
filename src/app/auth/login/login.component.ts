@@ -34,9 +34,12 @@ export class LoginComponent implements OnInit, OnDestroy {
         email: this.form.controls['email'].value,
         password: this.form.controls['password'].value
       }
+      localStorage.clear()
       this.api.apiPostCall(payload, 'adminLogin').subscribe(data => {
         if(data.data.accessToken){
           localStorage.setItem('token', data.data.accessToken)
+          localStorage.setItem('userEmail', data.data.email)
+          localStorage.setItem('userRegion', data.data.region)
           this.router.navigate(['/liveCases/list'])  
           this.snackbar.openFromComponent(SnackbarComponent, {
             data: 'LoggedIn Successfully',

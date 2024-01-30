@@ -10,11 +10,15 @@ import { Router } from '@angular/router';
 export class HeadersComponent implements OnInit {
   @Input() collapsed = false;
   @Input() screenWidth = 0;
-  customerList: any;
+  userData: any;
   noData: boolean;
 
   constructor(private api: ApiService,private router:Router) { }
   ngOnInit(): void {
+    this.userData={
+      "email":localStorage.getItem('userEmail'),
+      "region":localStorage.getItem('userRegion')
+    }
   }
 
  
