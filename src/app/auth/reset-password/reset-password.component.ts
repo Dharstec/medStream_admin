@@ -12,6 +12,7 @@ import { ApiService } from 'src/app/services/api.service';
 export class ResetPasswordComponent implements OnInit {
   
   form: FormGroup;
+  submitted = false;
 
   constructor(
     private fb: FormBuilder, 
@@ -21,34 +22,14 @@ export class ResetPasswordComponent implements OnInit {
     private snackbar: MatSnackBar
   ) { }
 
-  // ngOnInit(): void {
-  //   this.route.queryParams.subscribe(params => {
-  //     const email = params['email'];
-  //     const flag = params['flag'];
-  //     this.form = this.fb.group({
-  //       newPassword: ['', [
-  //         Validators.required,
-  //         Validators.pattern('^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#$%^&*()_+|~=`{}\\[\\]:";\'<>?,.\\/-]).{8,}$')
-  //       ]],
-  //       confirmPassword: ['', Validators.required]
-  //     }, { validator: this.passwordsMatchValidator });
-  //     this.form.patchValue({ email: email, flag: flag });
-  //   });
-  // }
   ngOnInit(): void {
-    this.route.queryParams.subscribe(params => {
-      const email = params['email'];
-      const flag = params['flag'];
-      this.form = this.fb.group({
-        email: [email, Validators.required], // Add email control
-        flag: [flag, Validators.required], // Add flag control
-        newPassword: ['', [
-          Validators.required,
-          Validators.pattern('^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#$%^&*()_+|~=`{}\\[\\]:";\'<>?,.\\/-]).{8,}$')
-        ]],
-        confirmPassword: ['', Validators.required]
-      }, { validator: this.passwordsMatchValidator });
-    });
+    this.form = this.fb.group({
+      newPassword: ['', [
+        Validators.required,
+        Validators.pattern('^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#$%^&*()_+|~=`{}\\[\\]:";\'<>?,.\\/-]).{8,}$')
+      ]],
+      confirmPassword: ['', Validators.required]
+    }, { validator: this.passwordsMatchValidator });
   }
   
 
@@ -59,34 +40,36 @@ export class ResetPasswordComponent implements OnInit {
   }
 
   onSubmit() {
+    this.submitted = true;
+    const email = localStorage.getItem('forgotPasswordEmail');
+    const flag = localStorage.getItem('forgotPasswordFlag');
     if (this.form.invalid) {
       return;
     } else {
       const payload = {
-        email: this.form.controls['email'].value,
-        flag: this.form.controls['flag'].value,
+        email: email,
+        flag:flag,
         newPassword: this.form.controls['newPassword'].value,
         confirmPassword: this.form.controls['confirmPassword'].value
       }
       this.api.apiPostCall(payload, 'resetPassword').subscribe(data => {
         if(data && data.message && data.message.includes('Password Changed Successfully')) {
           this.router.navigate(['/auth/login']);
-          this.snackbar.open('Password reset successfully. Please login with your new password.', 'Close', {
-            duration: 3000 // 3 seconds
+          this.snackbar.open(data.message, 'Close', {
+            duration: 3000 
           });
         } else {
-          this.snackbar.open('Failed to reset password. Please try again.', 'Close', {
-            duration: 3000 // 3 seconds
+          this.snackbar.open(data.message, 'Close', {
+            duration: 3000 
           });
         }
       }, error => {
         console.error(error);
         this.snackbar.open('Error resetting password. Please try again later.', 'Close', {
-          duration: 3000 // 3 seconds
+          duration: 3000
         });
       });
     }
   }
 }
-
 

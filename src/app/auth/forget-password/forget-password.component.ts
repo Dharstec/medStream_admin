@@ -27,42 +27,40 @@ export class ForgetPasswordComponent implements OnInit, OnDestroy {
   }
 
   onSubmit() {
-    console.log('test');
-
     if (this.form.invalid) {
-      console.log('invalid');
       return;
     } else {
-      console.log('valid');
       const email = this.form.value.email; // Get the email from the form
       const payload = {
         email: email,
         flag: 'Admin' // Add the flag field to the payload
       };
-      this.api.apiPostCall( payload , 'sendOTP').subscribe(
+      // Store email and flag in local storage before navigating to OTP component
+      localStorage.setItem('forgotPasswordEmail', email);
+      localStorage.setItem('forgotPasswordFlag', payload.flag);
+      this.api.apiPostCall(payload, 'sendOTP').subscribe(
         (data) => {
           console.log(data);
           if (data && data.message && data.message.includes('Email id not found')) {
             // If the response indicates that the email ID was not found, show an error message
-            this.snackbar.open('Email ID not found.', 'Close', {
+            this.snackbar.open(data.message, 'Close', {
               duration: 3000 // 3 seconds
             })
-          } else {
-            // If the email was successfully posted, navigate to the OTP page
-            this.router.navigate(['/auth/otp'], { queryParams: { email: payload.email, flag: payload.flag } });
+          } 
+          else {
+            this.router.navigate(['/auth/otp']);
+            this.snackbar.open('Enter your OTP.', 'close',{duration:3000})
           }
         },
         (error) => {
           console.error(error);
           this.snackbar.open('Error sending OTP. Please try again later.', 'Close', {
-            duration: 3000 // 3 seconds
+            duration: 3000
           });
         }
       );
-      console.log('conditions checked');
     }
-}
-
+  }
 
   ngOnDestroy() {
     // You can perform cleanup here if needed

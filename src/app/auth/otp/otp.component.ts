@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 import { ApiService } from 'src/app/services/api.service';
 
 @Component({
@@ -22,25 +22,13 @@ export class OtpComponent implements OnInit, OnDestroy {
   constructor(
     private fb: FormBuilder,
     private router: Router,
-    private route: ActivatedRoute,
     private api: ApiService,
     private snackbar: MatSnackBar
   ) { }
 
   ngOnInit(): void {
-    this.route.queryParams.subscribe(params => {
-      const email = params['email'];
-      const flag = params['flag'];
-
-      // Use email and flag as needed in the component...
-    });
-
     this.form = this.fb.group({
       otp: ['', [Validators.required, Validators.pattern('^[0-9]{6}$')]]
-    });
-
-    this.form.controls['otp'].valueChanges.subscribe(() => {
-      this.submitted = false; // Reset submitted flag
     });
   }
 
@@ -64,8 +52,8 @@ export class OtpComponent implements OnInit, OnDestroy {
     if (this.form.invalid) {
       return;
     } else {
-      const email = this.route.snapshot.queryParams['email'];
-      const flag = this.route.snapshot.queryParams['flag'];
+      const email = localStorage.getItem('forgotPasswordEmail');
+      const flag = localStorage.getItem('forgotPasswordFlag');
       const otp = this.form.controls['otp'].value;
 
       const payload = {
@@ -76,16 +64,19 @@ export class OtpComponent implements OnInit, OnDestroy {
 
       this.api.apiPostCall(payload, 'verifyUserOtp').subscribe(data => {
         if (data && data.message && data.message.includes('success')) {
-          this.router.navigate(['/auth/resetPassword'],{ queryParams: { email: email, flag: flag, otp: otp } });
+          this.router.navigate(['/auth/resetPassword']);
+          this.snackbar.open(data.message, 'Close', {
+            duration: 3000
+          });
         } else {
-          this.snackbar.open('Invalid OTP. Please try again.', 'Close', {
-            duration: 3000 // 3 seconds
+          this.snackbar.open(data.message, 'Close', {
+            duration: 3000
           });
         }
       }, error => {
         console.error(error);
         this.snackbar.open('Error verifying OTP. Please try again later.', 'Close', {
-          duration: 3000 // 3 seconds
+          duration: 3000
         });
       });
     }
@@ -93,5 +84,6 @@ export class OtpComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() { }
 }
+
 
 
