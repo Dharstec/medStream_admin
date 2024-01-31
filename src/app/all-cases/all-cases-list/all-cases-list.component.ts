@@ -7,7 +7,7 @@ import { ApiService } from 'src/app/services/api.service';
 import { ConfirmDialogComponent } from 'src/app/shared-module/confirm-dialog/confirm-dialog.component';
 import { SnackbarComponent } from 'src/app/shared-module/snackbar/snackbar.component';
 import { AllCasesService } from '../all-cases.service';
-import * as moment from 'moment';
+// import * as moment from 'moment';
 import {
   MatPaginator
 } from '@angular/material/paginator';

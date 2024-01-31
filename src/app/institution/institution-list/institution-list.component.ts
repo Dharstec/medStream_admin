@@ -22,7 +22,7 @@ import {
 export class InstitutionListComponent  implements OnInit {
   dataSource = new MatTableDataSource<any>([]);
   @ViewChild(MatPaginator) institutionPaginations: MatPaginator;
-  columnsToDisplay = ['s.no', 'image', 'name', 'location', 'operator','action'];
+  columnsToDisplay = ['s.no', 'image', 'name', 'location','action'];
   selectedValue: any;
   selectedColourValue: any;
   selectedStockValue: any
@@ -31,6 +31,7 @@ export class InstitutionListComponent  implements OnInit {
   originalData: any[];
   noData=false;
   pageSize: number=5;
+  opsList : any;
 
   constructor(private api: ApiService,public dialog: MatDialog, private snackbar: MatSnackBar, private router: Router,private insSer:InstitutionService) { }
 
@@ -55,7 +56,6 @@ export class InstitutionListComponent  implements OnInit {
       }
     })
   } 
-  
   delete(id: string): void {
     const dialog = this.dialog.open(ConfirmDialogComponent, {
       width: '250px',
@@ -83,5 +83,5 @@ export class InstitutionListComponent  implements OnInit {
     this.noData = this.dataSource.filteredData.length ? false : true
   }
 
-  
+
 }

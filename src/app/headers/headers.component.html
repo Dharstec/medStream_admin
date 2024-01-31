@@ -24,11 +24,11 @@
                         </div>
                       </mat-menu>
                 </div> -->
-                <div class="head-menu-item">
+                <!-- <div class="head-menu-item">
                     <button class="head-menu-item-btn ripple">
-                        <mat-icon style="color:red">search</mat-icon>
+                        <mat-icon style="color:red !important">search</mat-icon>
                     </button>
-                </div>
+                </div> -->
 
             </div>
             <!-- <div class="head-menu-item">
@@ -45,21 +45,20 @@
                         </button>
                     </div>
                     <div class="circle-indicator pulse">
-
                     </div>
                     <mat-menu #menu="matMenu">
                         <div class="matMenu">
                               <!-- <div class="user-info row">
-                                <mat-icon>person</mat-icon><span>userName</span>
+                                <mat-icon>person</mat-icon><span>{{userData.name}}</span>
                               </div> -->
                               <div class="user-info row">
-                                <mat-icon>email</mat-icon><span>{{userData.email}}</span>
+                                <mat-icon style="color:red">email</mat-icon><span>{{userData.email}}</span>
                               </div>
-                              <!-- <div class="user-info row">
-                                <mat-icon>access_time</mat-icon><span>{{userData.region}}</span>
-                              </div> -->
-                              <div class="row" (click)="logout()">
-                                <mat-icon>logout</mat-icon><span>Logout</span>
+                              <div class="user-info row">
+                                <mat-icon style="color:red">access_time</mat-icon><span>{{userData.region}}</span>
+                              </div>
+                              <div class="row user-info" (click)="logout()">
+                                <mat-icon style="color:red">logout</mat-icon><span>Logout</span>
                               </div>
                         </div>
                     </mat-menu>    
