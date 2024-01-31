@@ -16,13 +16,13 @@ export class AppComponent implements OnInit ,OnDestroy{
   screenWidth = 0;
   isSideNavCollapsed = false;
   hide=true;
-  show: boolean;
+  show: boolean=false;
   isToken: boolean;
-  constructor(private splashScreenService: SplashScreenService,private router:Router) {
+  constructor(private splashScreenService: SplashScreenService,private router:Router) { 
     router.events.forEach((event) => {
       if (event instanceof NavigationStart) {
         console.log(event.url)
-        if (event['url'] == '/auth/login') {
+        if (event['url']=='/' || event['url'].includes('/auth')) {
           this.show = false;
         } else {
           this.show = true;
