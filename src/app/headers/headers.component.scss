@@ -89,7 +89,6 @@
 
             .head-user-avatar-container {
                 margin-left: 5px;
-
                 .head-user-avatar {
                     position: relative;
 
@@ -156,7 +155,6 @@
 }
 
 .matMenu {
-    // width: 200px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -164,6 +162,7 @@
     padding: 0 20px;
     cursor: pointer;
     row-gap: 10px;
+    overflow-x: hidden !important;
 }
 .row {
     display: flex;
@@ -172,6 +171,8 @@
   
   .user-info {
     margin-top: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
   }
  
   mat-icon {

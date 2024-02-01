@@ -23,6 +23,8 @@ export class ExpertsListComponent implements OnInit {
   expertList: any;
   originalData: any[];
   noData = false;
+  institutionList: any[] = [];
+  selectedInstitution:string;
 
   constructor(private api: ApiService, public dialog: MatDialog, private snackbar: MatSnackBar, private router: Router, private expSer: ExpertsService) { }
 
@@ -34,7 +36,14 @@ export class ExpertsListComponent implements OnInit {
     this.expSer.data = data;
     this.router.navigate(['/experts/' + type, id]);
   }
-
+  getInstitutionList(): void {
+    this.api.apiGetCall('institute').subscribe((data) => {
+      this.institutionList = data.data;
+    })
+  }
+  onInstitutionSelect(event: any): void {
+    this.selectedInstitution = event.value;
+  }
   
   getExpertList(): void {
     this.api.apiGetCall('experts').subscribe((data) => {
