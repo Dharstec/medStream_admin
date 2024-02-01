@@ -22,7 +22,7 @@ import {
 export class InstitutionListComponent  implements OnInit {
   dataSource = new MatTableDataSource<any>([]);
   @ViewChild(MatPaginator) institutionPaginations: MatPaginator;
-  columnsToDisplay = ['s.no', 'image', 'name', 'location', 'operator','action'];
+  columnsToDisplay = ['s.no', 'image', 'name', 'location','action'];
   selectedValue: any;
   selectedColourValue: any;
   selectedStockValue: any
@@ -83,5 +83,5 @@ export class InstitutionListComponent  implements OnInit {
     this.noData = this.dataSource.filteredData.length ? false : true
   }
 
-  
+
 }
