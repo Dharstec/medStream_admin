@@ -2,21 +2,32 @@
     <div class="card">
         <div class="row" style="display:flex;flex-direction: row;align-items: center;">
             <div class="section-b col-md-3">
-                <input class="input m-3" (keyup)="applyFilter($event.target.value)" type="text" name="Search" placeholder="Search...">
+                <input class="input m-3" (keyup)="applyFilter($event.target.value)" [formControl]="search" type="text" name="Search" placeholder="Search...">
             </div>
-            <div class="col-md-6" style="display:flex ;justify-content:flex-start;gap:10px">
+            <div class="col-md-4" style="display:flex ;justify-content:flex-start;gap:10px">
             </div>
+            <mat-form-field style="width: 16%;">
+                <mat-select placeholder="Institutions" [formControl]="institutions" multiple (selectionChange)="applyTypeFilter()">
+                  <mat-select-trigger>
+                    {{institutions.value ? institutions.value[0] : ''}}
+                    <span *ngIf="institutions.value?.length > 1" class="example-additional-selection">
+                      (+{{institutions.value.length - 1}} others)
+                    </span>
+                  </mat-select-trigger>
+                  <mat-option *ngFor="let list of institutionList" [value]="list">{{list}}</mat-option>
+                </mat-select>
+              </mat-form-field>
   
             <div class="add-coupon col-md-3">
                 <a routerLink="/operator/add">+&nbsp;{{'Add New Operator'}}</a>
             </div>
-  
         </div>
   
     </div>
     <div class="card">
         <div class="table_list">
-            <table mat-table matSort [dataSource]="filteredData?.length? filteredData:dataSource">
+            <!-- filteredData.data?.length? filteredData: -->
+            <table mat-table matSort [dataSource]="dataSource">
                 <ng-container matColumnDef="s.no">
                     <th class="first" mat-header-cell *matHeaderCellDef>
                         <span>S.No</span>

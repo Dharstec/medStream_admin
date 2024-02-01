@@ -24,10 +24,10 @@ export const navMenuBar = [
         icon: 'handshake',
         label: 'Operators'
     },
-    {
-        routeLink: 'user/list',
-        icon: 'group',
-        label: 'Users'
-    },
+    // {
+    //     routeLink: 'user/list',
+    //     icon: 'group',
+    //     label: 'Users'
+    // },
    
 ]
