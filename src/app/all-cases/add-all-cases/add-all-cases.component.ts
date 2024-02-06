@@ -134,7 +134,8 @@ export class AddAllCasesComponent implements OnInit {
       weekNo: ['', Validators.required],
       month: ['', Validators.required],
       caseOfTheWeek: ['', Validators.required],
-      operator: ['',Validators.required]
+      operator: ['',Validators.required],
+      year: ['',Validators.required]
     })
     this.activeRoute.paramMap.subscribe(params => {
       this.productId = params.get('id');
@@ -162,7 +163,8 @@ export class AddAllCasesComponent implements OnInit {
     this.form.controls['weekNo'].setValue(this.productDetails.weekNo);
     this.form.controls['month'].setValue(this.productDetails.month);
     this.form.controls['caseOfTheWeek'].setValue(this.productDetails.caseOfTheWeek);
-    this.form.controls['operator'].setValue(this.productDetails.operator)
+    this.form.controls['operator'].setValue(this.productDetails.operator);
+    this.form.controls['year'].setValue(this.productDetails.year);
     if (this.router.url.includes('view')) {
       this.form.disable();
     }
@@ -197,8 +199,6 @@ export class AddAllCasesComponent implements OnInit {
         "title": this.form.controls['title'].value,
         "youtubeUrl": this.form.controls['youtubeUrl'].value,
         "desciription": this.form.controls['desciription'].value,
-        // "filepath": 'https://api.medstream360.com/image-1702999237801.png',
-        // "thumbnail": 'https://api.medstream360.com/image-1702999237801.png',
         "filepath": this.mainImageSrc,
         "thumbnail": this.mainImageSrc,
         "category": this.form.controls['category'].value,
@@ -207,7 +207,9 @@ export class AddAllCasesComponent implements OnInit {
         "weekNo": this.form.controls['weekNo'].value,
         "month": this.form.controls['month'].value,
         "caseOfTheWeek": this.form.controls['caseOfTheWeek'].value,
-        "operator": this.form.controls['operator'].value
+        "operator_id": this.form.controls['operator'].value,
+        "year":this.form.controls['year'].value,
+        "liveStatus":"false"
       }
       if (!this.productId) {
         this.api.apiPostCall(payload, 'allcase').subscribe(data => {
