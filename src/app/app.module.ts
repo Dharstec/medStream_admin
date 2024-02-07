@@ -19,6 +19,7 @@ import { SplashScreenModule } from './splash-screen/splash-screen.module';
 import { ErrorInterceptor } from './services/core/error-interceptor';
 import { JwtInterceptor } from './services/core/jwt-interceptor';
 import { AuthGuard } from './services/core/auth.guard';
+import { OwlDateTimeModule,OwlNativeDateTimeModule } from 'ng-pick-datetime';
 
 
 @NgModule({
@@ -41,7 +42,9 @@ import { AuthGuard } from './services/core/auth.guard';
     ReactiveFormsModule,
     NgxSliderModule,
     MaterialModule,
-    SharedModule,SplashScreenModule
+    SharedModule,SplashScreenModule,
+    OwlDateTimeModule,
+    OwlNativeDateTimeModule,
   ],
 
   providers: [DatePipe,AuthGuard,

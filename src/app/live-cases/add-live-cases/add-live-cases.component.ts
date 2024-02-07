@@ -6,6 +6,7 @@ import { ApiService } from 'src/app/services/api.service';
 import { LiveCasesService } from '../live-cases.service';
 import { SnackbarComponent } from 'src/app/shared-module/snackbar/snackbar.component';
 
+
 @Component({
   selector: 'app-add-live-cases',
   templateUrl: './add-live-cases.component.html',
@@ -28,7 +29,7 @@ export class AddLiveCasesComponent implements OnInit {
   mainImageSrc: string;
   noImage = "assets/noImg.png"
   url = ['test']
-
+ currentDate =new Date()
   productId: string;
   edit = false;
   view = false;
@@ -74,6 +75,12 @@ export class AddLiveCasesComponent implements OnInit {
       this.filteredSubCategories=[]
 
     })
+  }
+
+  changeCaseTime(){
+    let startTime = this.form.controls['caseStartTime'].value
+    let endTime = this.form.controls['caseEndTime'].setValue(startTime)
+  
   }
 
   generateRandomString(): string {
@@ -130,11 +137,11 @@ export class AddLiveCasesComponent implements OnInit {
       desciription: ['', Validators.required],
       category: ['', Validators.required],
       subCategory: ['', Validators.required],
-      // ppt: ['', Validators.required],
+      operator_id: [null, Validators.required],
       institution: ['', Validators.required],
-      date: ['', Validators.required],
-      time: ['', Validators.required],
-      duration: ['', Validators.required],
+      caseStartTime: ['', Validators.required],
+      caseEndTime: ['', Validators.required],
+      // duration: ['', Validators.required],
     })
     this.activeRoute.paramMap.subscribe(params => {
       this.productId = params.get('id');
@@ -159,9 +166,12 @@ export class AddLiveCasesComponent implements OnInit {
     this.form.controls['category'].setValue(this.productDetails.category);
     this.form.controls['subCategory'].setValue(this.productDetails.subCategory);
     this.form.controls['institution'].setValue(this.productDetails.institution);
-    this.form.controls['date'].setValue(this.productDetails.date);
-    this.form.controls['time'].setValue(this.productDetails.time);
-    this.form.controls['duration'].setValue(this.productDetails.duration);
+    this.form.controls['operator_id'].setValue(this.productDetails.operator_id);
+    this.form.controls['caseStartTime'].setValue(this.productDetails.startTime);
+    this.form.controls['caseEndTime'].setValue(this.productDetails.endTime);
+    // this.form.controls['date'].setValue(this.productDetails.date);
+    // this.form.controls['time'].setValue(this.productDetails.time);
+    // this.form.controls['duration'].setValue(this.productDetails.duration);
     if (this.router.url.includes('view')) {
       this.form.disable();
     }
@@ -193,9 +203,11 @@ export class AddLiveCasesComponent implements OnInit {
         "category": this.form.controls['category'].value,
         "subCategory": this.form.controls['subCategory'].value,
         "institution": this.form.controls['institution'].value,
-        "date": this.form.controls['date'].value,
-        "time": this.form.controls['time'].value,
-        "duration": this.form.controls['duration'].value
+        "operator_id": this.form.controls['operator_id'].value,
+        "startTime": this.form.controls['caseStartTime'].value,
+        "endTime": this.form.controls['caseEndTime'].value,
+        "timeZone": localStorage.getItem('userRegion') ?  localStorage.getItem('userRegion') : null,
+        // "duration": this.form.controls['duration'].value
       }
 
       if (!this.productId) {
@@ -227,7 +239,7 @@ export class AddLiveCasesComponent implements OnInit {
   }
   onCategoryChange() {
     const selectedCategoryId = this.form.get('category')?.value;
-    const selectedCategory = this.cat.category_list.find(category => category._id === selectedCategoryId);
+    const selectedCategory = this.cat.category_list.find(category => category.category === selectedCategoryId);
     if (selectedCategory && selectedCategory.subCategory.length > 0) {
       this.filteredSubCategories = selectedCategory.subCategory;
     } else {
