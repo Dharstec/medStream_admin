@@ -1,12 +1,13 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { LiveListComponent } from './live-list/live-list.component';
 import { LiveCasesComponent } from './live-cases.component';
 import { RouterModule, Routes } from '@angular/router';
-import { ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule,FormsModule } from '@angular/forms';
 import { MaterialModule } from '../material.module';
 import { AddLiveCasesComponent } from './add-live-cases/add-live-cases.component';
 import { AuthGuard } from '../services/core/auth.guard';
+import { OwlDateTimeModule,OwlNativeDateTimeModule,DateTimeAdapter,OWL_DATE_TIME_FORMATS,OWL_DATE_TIME_LOCALE } from 'ng-pick-datetime';
 
 const routes: Routes = [
   {
@@ -25,6 +26,12 @@ const routes: Routes = [
   declarations: [
     LiveListComponent, LiveCasesComponent, AddLiveCasesComponent
   ],
-  imports: [CommonModule, MaterialModule, ReactiveFormsModule, RouterModule.forChild(routes)],
+  imports: [CommonModule, MaterialModule, ReactiveFormsModule,FormsModule, RouterModule.forChild(routes),
+    OwlDateTimeModule,OwlNativeDateTimeModule],
+    providers:[DatePipe,
+      // {provide:DateTimeAdapter,deps:[OWL_DATE_TIME_LOCALE]},
+      // {provide:OWL_DATE_TIME_FORMATS,useValue:My}
+    ],
+    bootstrap:    [  LiveListComponent, LiveCasesComponent, AddLiveCasesComponent ]
 })
 export class LiveCasesModule { }
