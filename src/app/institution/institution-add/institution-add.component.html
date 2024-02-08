@@ -64,8 +64,8 @@
           <div class="row">
             <div class="section-b col">
               <!-- <mat-label>Your Content <span class="required">*</span></mat-label> -->
-              <textarea class="input" matInput rows="3" cols="3" formControlName="description" placeholder="Description" maxlength="250"></textarea>
-              <mat-hint class="hintalign">{{form.get('description').value?.length || 0}}/250
+              <textarea class="input" matInput rows="3" cols="3" formControlName="description" placeholder="Description" maxlength="1000"></textarea>
+              <mat-hint class="hintalign">{{form.get('description').value?.length || 0}}/1000
               </mat-hint>
               <mat-error *ngIf="submitted && form.get('description')?.errors?.required">{{'Description is required'}}
               </mat-error>

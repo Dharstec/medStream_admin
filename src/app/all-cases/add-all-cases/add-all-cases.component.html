@@ -36,8 +36,8 @@
                         <div class="section-b col">
                             <!-- <mat-label>Your Content <span class="required">*</span></mat-label> -->
                             <textarea class="input" matInput rows="5" cols="4" formControlName="desciription"
-                                placeholder="Description" maxlength="250"></textarea>
-                            <mat-hint class="hintalign">{{form.get('desciription').value?.length || 0}}/250
+                                placeholder="Description" maxlength="1000"></textarea>
+                            <mat-hint class="hintalign">{{form.get('desciription').value?.length || 0}}/1000
                             </mat-hint>
                             <mat-error *ngIf="submitted && form.get('desciription')?.errors?.required">{{'Description is required'}}
                             </mat-error>
@@ -87,7 +87,7 @@
             <div class="row">
                 <div class="section-b col-4">
                     <mat-select style="margin: 0 !important;" placeholder="Category" formControlName="category" (selectionChange)="onCategoryChange()">
-                        <mat-option *ngFor="let category of cat.category_list" [value]="category._id">{{ category.category }}</mat-option>
+                        <mat-option *ngFor="let category of categoryList.category_list" [value]="category.category">{{ category.category }}</mat-option>
                     </mat-select>
                     <mat-error *ngIf="submitted && form.get('category')?.errors?.required">{{'Category is required'}}</mat-error>
                 </div>
