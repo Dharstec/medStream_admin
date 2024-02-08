@@ -158,8 +158,8 @@ export class AddLiveCasesComponent implements OnInit {
 
   getProductDetails(data) {
     this.productDetails = data;
-    // this.mainImageSrc = data.thumbnail;
-    this.mainImageSrc = data.image;
+    this.mainImageSrc = data.thumbnail;
+    // this.mainImageSrc = data.image;
     this.form.controls['title'].setValue(this.productDetails.title);
     this.form.controls['youtubeUrl'].setValue(this.productDetails.youtubeUrl);
     this.form.controls['desciription'].setValue(this.productDetails.desciription);
