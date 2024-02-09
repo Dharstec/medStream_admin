@@ -158,7 +158,7 @@ export class AddLiveCasesComponent implements OnInit {
 
   getProductDetails(data) {
     this.productDetails = data;
-    // this.mainImageSrc = data.thumbnail;
+    this.mainImageSrc = data.thumbnail;
     this.mainImageSrc = data.image;
     this.form.controls['title'].setValue(this.productDetails.title);
     this.form.controls['youtubeUrl'].setValue(this.productDetails.youtubeUrl);
@@ -191,15 +191,15 @@ export class AddLiveCasesComponent implements OnInit {
     if (this.form.invalid) {
       return
     } else {
-      // const formData = new FormData()
-      // formData.append('image', this.mainImageSrc)
-      // this.api.apiPostCall(formData, 'ImageUpload').subscribe(data => {
-      //   if (data.status === true) {
+      const formData = new FormData()
+      formData.append('image', this.imageUpload[0])
+      this.api.apiPostCall(formData, 'ImageUpload').subscribe(data => {
+        if (data.status === true) {
       const payload = {
         "title": this.form.controls['title'].value,
         "youtubeUrl": this.form.controls['youtubeUrl'].value,
         "desciription": this.form.controls['desciription'].value,
-        "thumbnail": 'https://api.medstream360.com/image-1702999237801.png',
+        "thumbnail": data.Image,
         "category": this.form.controls['category'].value,
         "subCategory": this.form.controls['subCategory'].value,
         "institution": this.form.controls['institution'].value,
@@ -231,8 +231,8 @@ export class AddLiveCasesComponent implements OnInit {
       }
 
       console.log(payload)
-      // }
-      // })
+      }
+      })
 
     }
 

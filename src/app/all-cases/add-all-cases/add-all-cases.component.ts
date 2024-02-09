@@ -199,8 +199,8 @@ export class AddAllCasesComponent implements OnInit {
         "title": this.form.controls['title'].value,
         "youtubeUrl": this.form.controls['youtubeUrl'].value,
         "desciription": this.form.controls['desciription'].value,
-        "filepath": this.mainImageSrc,
-        "thumbnail": this.mainImageSrc,
+        "filepath": data.Image,
+        "thumbnail": data.Image,
         "category": this.form.controls['category'].value,
         "subCategory": this.form.controls['subCategory'].value,
         "institution": this.form.controls['institution'].value,
@@ -209,10 +209,11 @@ export class AddAllCasesComponent implements OnInit {
         "caseOfTheWeek": this.form.controls['caseOfTheWeek'].value,
         "operator_id": this.form.controls['operator'].value,
         "year":this.form.controls['year'].value,
-        "liveStatus":"false"
+        "liveStatus":false
       }
       if (!this.productId) {
         this.api.apiPostCall(payload, 'allcase').subscribe(data => {
+          console.log(payload)
           if (data.status == true) {
             this.snackbar.openFromComponent(SnackbarComponent, {
               data: 'Successfully Saved',
@@ -241,7 +242,7 @@ export class AddAllCasesComponent implements OnInit {
 
   onCategoryChange() {
     const selectedCategoryId = this.form.get('category')?.value;
-    const selectedCategory = this.cat.category_list.find(category => category._id === selectedCategoryId);
+    const selectedCategory = this.cat.category_list.find(category => category.category === selectedCategoryId);
     if (selectedCategory && selectedCategory.subCategory.length > 0) {
       this.filteredSubCategories = selectedCategory.subCategory;
     } else {
@@ -250,23 +251,29 @@ export class AddAllCasesComponent implements OnInit {
   }
 
   // ///////////////////
+  // onInstitutionChange(): void {
+  //   const selectedInstitutionId = this.form.get('institution')?.value;
+  //   const selectedInstitution = this.instList.find((institution: any) => institution._id === selectedInstitutionId);
+  
+  //   if (selectedInstitution) {
+  //     this.getOperatorsForInstitution(selectedInstitutionId);
+  //   } else {
+  //     this.ops = [];
+  //   }
+  // }
   onInstitutionChange(): void {
     const selectedInstitutionId = this.form.get('institution')?.value;
     const selectedInstitution = this.instList.find((institution: any) => institution._id === selectedInstitutionId);
   
     if (selectedInstitution) {
-      // Fetch operators based on the selected institution and update the ops array
       this.getOperatorsForInstitution(selectedInstitutionId);
     } else {
-      // Reset the ops array or take any other appropriate action
       this.ops = [];
     }
   }
+  
   getOperatorsForInstitution(institutionId: string): void {
-    // Call your API to get operators based on the selected institution
-    // Update the ops array with the fetched operators
-    // Example:
-    this.api.apiGetCall(`operators?institution=${institutionId}`).subscribe((data) => {
+    this.api.apiGetCall(`operator?institute=${institutionId}`).subscribe((data) => {
       this.ops = data.data;
     });
   }

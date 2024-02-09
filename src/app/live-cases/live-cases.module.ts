@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA, NgModule } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { LiveListComponent } from './live-list/live-list.component';
 import { LiveCasesComponent } from './live-cases.component';
@@ -32,6 +32,7 @@ const routes: Routes = [
       // {provide:DateTimeAdapter,deps:[OWL_DATE_TIME_LOCALE]},
       // {provide:OWL_DATE_TIME_FORMATS,useValue:My}
     ],
-    bootstrap:    [  LiveListComponent, LiveCasesComponent, AddLiveCasesComponent ]
+    bootstrap:    [  LiveListComponent, LiveCasesComponent, AddLiveCasesComponent ],
+    schemas:[NO_ERRORS_SCHEMA,CUSTOM_ELEMENTS_SCHEMA]
 })
 export class LiveCasesModule { }
