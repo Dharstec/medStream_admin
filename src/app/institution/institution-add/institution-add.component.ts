@@ -13,9 +13,6 @@ import { SnackbarComponent } from 'src/app/shared-module/snackbar/snackbar.compo
 })
 export class InstitutionAddComponent implements OnInit {
   form: FormGroup;
-  editproduct: any;
-  productview = false;
-  changename: any;
   changetheproductName: any
   @ViewChild('fileInput') fileInput: ElementRef;
   videoSelect = false;
@@ -36,6 +33,15 @@ export class InstitutionAddComponent implements OnInit {
   isSave = false;
   imageUpload :any;
 
+  continentList=[
+    {"name":"Africa"},
+    {"name":"Asia"},
+    {"name":"Australia"},
+    {"name":"Europe"},
+    {"name":"North America"},
+    {"name":"South America"}
+  ]
+
   
   constructor(private router: Router, private formBuilder: UntypedFormBuilder, private api: ApiService, private snackbar: MatSnackBar, private activeRoute: ActivatedRoute, private insSer: InstitutionService) {
   }
@@ -54,6 +60,9 @@ export class InstitutionAddComponent implements OnInit {
     this.form.controls['name'].setValue(this.productDetails.name);
     this.form.controls['city'].setValue(this.productDetails.city);
     this.form.controls['country'].setValue(this.productDetails.country);
+    this.form.controls['continent'].setValue(this.productDetails.continent);
+    this.form.controls['lng'].setValue(this.productDetails.lng);
+    this.form.controls['lat'].setValue(this.productDetails.lat);
     this.form.controls['location'].setValue(this.productDetails.location);
     this.form.controls['description'].setValue(this.productDetails.description);
     this.form.controls['address'].setValue(this.productDetails.address);
@@ -82,6 +91,7 @@ export class InstitutionAddComponent implements OnInit {
     }
   }
 
+
   handleImageUpload(file: File) {
     const reader = new FileReader();
     reader.onload = (e: any) => {
@@ -108,6 +118,9 @@ export class InstitutionAddComponent implements OnInit {
       name: ['', Validators.required], //bc name 
       city: ['', Validators.required],
       country: ['', Validators.required],
+      continent: ['', Validators.required],
+      lat: ['', Validators.required],
+      lng: ['', Validators.required],
       location: ['', Validators.required],
       description: ['', Validators.required],
       address: ['', Validators.required],
@@ -136,49 +149,109 @@ export class InstitutionAddComponent implements OnInit {
     this.router.navigate(['/institution/list'])
   }
 
+  callGoogleApi(){
+  //  let loc = this.form.get('location').value
+   let body={
+    "name":this.form.get('name').value,
+    "country":this.form.get('country').value
+   }
+   if(this.form.get('name').value && this.form.get('country').value){
+    this.api.apiPostCall(body,`getLngLat`).subscribe((data:any) => {
+      let response= data.data.results
+      console.log('geolocation',response)
+      if(response.length){
+        this.form.get('lat').setValue(response[0].geometry.location.lat)
+        this.form.get('lng').setValue(response[0].geometry.location.lng)
+      }else{
+        this.form.get('lat').setValue(null)
+        this.form.get('lng').setValue(null)
+        this.snackbar.openFromComponent(SnackbarComponent, {
+          data: 'Location Not Found.',
+        });
+      }
+    })
+   }else{
+    this.snackbar.openFromComponent(SnackbarComponent, {
+      data: 'Please enter the valid fields',
+    });
+   }
+  }
+
 
   save() {
+    // console.log("---",this.imageUpload,this.mainImageSrc)
     if (this.form.invalid) {
+      // console.log("---",this.form)
       return
     } else {
       console.log("valid form ")
       const formData = new FormData()
-      formData.append('image', this.imageUpload[0])
-      this.api.apiPostCall(formData, 'ImageUpload').subscribe(data => {
-        if (data.status === true) {
-          const payload = {
-            "name": this.form.controls['name'].value,
-            "city": this.form.controls['city'].value,
-            "country": this.form.controls['country'].value,
-            "image": data.Image,
-            "location": this.form.controls['location'].value,
-            "description": this.form.controls['description'].value,
-            "address": this.form.controls['address'].value,
-          }
-
-      if (!this.productId) {
-        this.api.apiPostCall(payload, 'institute').subscribe(data => {
-          if (data.status == true) {
-            this.snackbar.openFromComponent(SnackbarComponent, {
-              data: 'Successfully Saved',
-            });
-            this.router.navigate(['/institution/list'])
-          }
+      if(!this.mainImageSrc && !this.mainImageSrc.includes('medstream360')){
+        formData.append('image', this.imageUpload[0])
+        this.api.apiPostCall(formData, 'ImageUpload').subscribe(data => {
+          if (data.status === true) {
+            const payload = {
+              "name": this.form.controls['name'].value,
+              "city": this.form.controls['city'].value,
+              "country": this.form.controls['country'].value,
+              "continent": this.form.controls['continent'].value,
+              "lat": this.form.controls['lat'].value,
+              "lng": this.form.controls['lng'].value,
+              "image": data.Image,
+              "location": this.form.controls['location'].value,
+              "description": this.form.controls['description'].value,
+              "address": this.form.controls['address'].value,
+            }
+  
+        if (!this.productId) {
+          this.api.apiPostCall(payload, 'institute').subscribe(data => {
+            if (data.status == true) {
+              this.snackbar.openFromComponent(SnackbarComponent, {
+                data: 'Successfully Saved',
+              });
+              this.router.navigate(['/institution/list'])
+            }
+          })
+        } else {
+          this.api.apiPutCall(payload, 'institute' +'/'+ this.productId).subscribe(data => {
+            if (data.status == true) {
+              this.snackbar.openFromComponent(SnackbarComponent, {
+                data: 'Successfully Updated',
+              });
+              this.router.navigate(['/institution/list'])
+            }
+          })
+        }
+  
+        console.log(payload)
+        }
         })
-      } else {
-        this.api.apiPutCall(payload, 'institute' +'/'+ this.productId).subscribe(data => {
-          if (data.status == true) {
-            this.snackbar.openFromComponent(SnackbarComponent, {
-              data: 'Successfully Updated',
-            });
-            this.router.navigate(['/institution/list'])
-          }
-        })
+      }else{
+    
+            const payload = {
+              "name": this.form.controls['name'].value,
+              "city": this.form.controls['city'].value,
+              "country": this.form.controls['country'].value,
+              "continent": this.form.controls['continent'].value,
+              "lat": this.form.controls['lat'].value.toString(),
+              "lng": this.form.controls['lng'].value.toString(),
+              "image": this.mainImageSrc,
+              "location": this.form.controls['location'].value,
+              "description": this.form.controls['description'].value,
+              "address": this.form.controls['address'].value,
+            }
+          this.api.apiPutCall(payload, 'institute' +'/'+ this.productId).subscribe(data => {
+            if (data.status == true) {
+              this.snackbar.openFromComponent(SnackbarComponent, {
+                data: 'Successfully Updated',
+              });
+              this.router.navigate(['/institution/list'])
+            }
+          })
+  
+        console.log(payload)
       }
-
-      console.log(payload)
-      }
-      })
+    
 
     }
 
