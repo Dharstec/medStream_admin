@@ -16,7 +16,7 @@ export class InstitutionAddComponent implements OnInit {
   changetheproductName: any
   @ViewChild('fileInput') fileInput: ElementRef;
   videoSelect = false;
-  mainImageSrc: string;
+  mainImageSrc: string='';
   apiMainImageSrc: string;
   images: Array<string> = [];
   apiMainImages: Array<string> = [];
@@ -181,65 +181,53 @@ export class InstitutionAddComponent implements OnInit {
   save() {
     // console.log("---",this.imageUpload,this.mainImageSrc)
     if (this.form.invalid) {
+      this.submitted=true
       // console.log("---",this.form)
       return
     } else {
-      console.log("valid form ")
+      this.submitted=false
+      // console.log("valid form ",this.imageUpload,this.mainImageSrc,this.productId)
       const formData = new FormData()
-      if(!this.mainImageSrc && !this.mainImageSrc.includes('medstream360')){
+      var payload = {
+        "name": this.form.controls['name'].value,
+        "city": this.form.controls['city'].value,
+        "country": this.form.controls['country'].value,
+        "continent": this.form.controls['continent'].value,
+        "lat": this.form.controls['lat'].value.toString(),
+        "lng": this.form.controls['lng'].value.toString(),
+        "image": this.mainImageSrc,
+        "location": this.form.controls['location'].value,
+        "description": this.form.controls['description'].value,
+        "address": this.form.controls['address'].value,
+      }
+      if(this.imageUpload && this.imageUpload.length){
         formData.append('image', this.imageUpload[0])
         this.api.apiPostCall(formData, 'ImageUpload').subscribe(data => {
           if (data.status === true) {
-            const payload = {
-              "name": this.form.controls['name'].value,
-              "city": this.form.controls['city'].value,
-              "country": this.form.controls['country'].value,
-              "continent": this.form.controls['continent'].value,
-              "lat": this.form.controls['lat'].value,
-              "lng": this.form.controls['lng'].value,
-              "image": data.Image,
-              "location": this.form.controls['location'].value,
-              "description": this.form.controls['description'].value,
-              "address": this.form.controls['address'].value,
-            }
-  
-        if (!this.productId) {
-          this.api.apiPostCall(payload, 'institute').subscribe(data => {
-            if (data.status == true) {
-              this.snackbar.openFromComponent(SnackbarComponent, {
-                data: 'Successfully Saved',
-              });
-              this.router.navigate(['/institution/list'])
-            }
-          })
-        } else {
-          this.api.apiPutCall(payload, 'institute' +'/'+ this.productId).subscribe(data => {
-            if (data.status == true) {
-              this.snackbar.openFromComponent(SnackbarComponent, {
-                data: 'Successfully Updated',
-              });
-              this.router.navigate(['/institution/list'])
-            }
-          })
-        }
-  
-        console.log(payload)
+             payload['image'] = data.Image
+              if (!this.productId) {
+                this.api.apiPostCall(payload, 'institute').subscribe(data => {
+                  if (data.status == true) {
+                    this.snackbar.openFromComponent(SnackbarComponent, {
+                      data: 'Successfully Saved',
+                    });
+                    this.router.navigate(['/institution/list'])
+                  }
+                })
+              } else {
+                this.api.apiPutCall(payload, 'institute' +'/'+ this.productId).subscribe(data => {
+                  if (data.status == true) {
+                    this.snackbar.openFromComponent(SnackbarComponent, {
+                      data: 'Successfully Updated',
+                    });
+                    this.router.navigate(['/institution/list'])
+                  }
+                })
+              }
+              console.log(payload)
         }
         })
       }else{
-    
-            const payload = {
-              "name": this.form.controls['name'].value,
-              "city": this.form.controls['city'].value,
-              "country": this.form.controls['country'].value,
-              "continent": this.form.controls['continent'].value,
-              "lat": this.form.controls['lat'].value.toString(),
-              "lng": this.form.controls['lng'].value.toString(),
-              "image": this.mainImageSrc,
-              "location": this.form.controls['location'].value,
-              "description": this.form.controls['description'].value,
-              "address": this.form.controls['address'].value,
-            }
           this.api.apiPutCall(payload, 'institute' +'/'+ this.productId).subscribe(data => {
             if (data.status == true) {
               this.snackbar.openFromComponent(SnackbarComponent, {

@@ -14,9 +14,9 @@
             <div class="row">
                 <div class="section-b col">
                     <input placeholder="Title" class="input" type="text" name="Search" matInput formControlName="title"
-                        maxlength="100" required>
-                    <mat-hint class="hintalign">{{form.get('title').value?.length || 0}}/50
-                    </mat-hint>
+                         required>
+                    <!-- <mat-hint class="hintalign">{{form.get('title').value?.length || 0}}/50
+                    </mat-hint> -->
                     <mat-error *ngIf="submitted && form.get('title')?.errors?.required">{{'Title is required'}}</mat-error>
                 </div>
             </div>
@@ -36,9 +36,9 @@
                         <div class="section-b col">
                             <!-- <mat-label>Your Content <span class="required">*</span></mat-label> -->
                             <textarea class="input" matInput rows="5" cols="4" formControlName="desciription"
-                                placeholder="Description" maxlength="250"></textarea>
-                            <mat-hint class="hintalign">{{form.get('desciription').value?.length || 0}}/250
-                            </mat-hint>
+                                placeholder="Description"></textarea>
+                            <!-- <mat-hint class="hintalign">{{form.get('desciription').value?.length || 0}}/250
+                            </mat-hint> -->
                             <mat-error *ngIf="submitted && form.get('desciription')?.errors?.required">{{'Description is required'}}
                             </mat-error>
                         </div>
@@ -101,7 +101,7 @@
             <hr class="new4">
             <div class="row">
                 <div class="section-b col-6 instituteCol">
-                    <mat-select  placeholder="Institution" formControlName="institution" >
+                    <mat-select  placeholder="Institution" formControlName="institution" (selectionChange)="onInstitutionChange()" >
                       <mat-option *ngFor="let row of instList" [value]="row._id">{{row.name}}</mat-option>
                     </mat-select>
                     <mat-error *ngIf="submitted && form.get('institution')?.errors?.required">{{'Institution is required'}}</mat-error>

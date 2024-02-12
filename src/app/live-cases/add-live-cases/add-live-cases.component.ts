@@ -26,7 +26,7 @@ export class AddLiveCasesComponent implements OnInit {
   video: string;
   apiVideoUrl: string;
   submitted = false;
-  mainImageSrc: string;
+  mainImageSrc: string='';
   noImage = "assets/noImg.png"
   url = ['test']
  currentDate =new Date()
@@ -49,11 +49,12 @@ export class AddLiveCasesComponent implements OnInit {
 
   }
 
-  ngOnInit(): void {
-    this.getCategory();
-    this.getOperator();
-    this.getInstitutionList();
+  async ngOnInit(): Promise<void> {
     this.initializeForm();
+    await this.getCategory();
+    // this.getOperator();
+    this.getInstitutionList();
+    this.bindCurrentCaseDtl()
     if (!this.productId) {
       this.mainImageSrc = this.noImage;
       this.generateRandomString();
@@ -64,17 +65,21 @@ export class AddLiveCasesComponent implements OnInit {
       this.instList = data.data;
     })
   }
-  getOperator(): void {
-    this.api.apiGetCall('operator').subscribe((data) => {
-      this.ops = data.data;
-    })
-  }
-  getCategory(): void {
-    this.api.apiGetCall('filters').subscribe((data) => {
-      this.cat = data.data;
-      this.filteredSubCategories=[]
-
-    })
+  // getOperator(): void {
+  //   this.api.apiGetCall('operator').subscribe((data) => {
+  //     this.ops = data.data;
+  //   })
+  // }
+  async getCategory() {
+    return new Promise(async (resolve, reject) => {
+      this.api.apiGetCall('filters').subscribe((data) => {
+       this.cat = data.data;
+       resolve(true)
+     },err => {
+       console.error('Error in getting filter api:', err);
+       reject(err)
+     })
+   })
   }
 
   changeCaseTime(){
@@ -143,27 +148,35 @@ export class AddLiveCasesComponent implements OnInit {
       caseEndTime: ['', Validators.required],
       // duration: ['', Validators.required],
     })
+  }
+
+  bindCurrentCaseDtl(){
     this.activeRoute.paramMap.subscribe(params => {
       this.productId = params.get('id');
       if (this.productId && this.router.url.includes('edit')) {
+        this.getProductDetails(this.liveSer.data);
         this.edit = true;
-        this.getProductDetails(this.liveSer.data);
       } else if (this.router.url.includes('view')) {
-        this.view = true;
         this.getProductDetails(this.liveSer.data);
+        this.view = true;
       }
 
     })
   }
 
-  getProductDetails(data) {
+  async getProductDetails(data) {
     this.productDetails = data;
     this.mainImageSrc = data.thumbnail;
+    await this.getOperatorsForInstitution(this.productDetails.institution._id);
     // this.mainImageSrc = data.image;
     this.form.controls['title'].setValue(this.productDetails.title);
     this.form.controls['youtubeUrl'].setValue(this.productDetails.youtubeUrl);
     this.form.controls['desciription'].setValue(this.productDetails.desciription);
     this.form.controls['category'].setValue(this.productDetails.category);
+    const selectedCategory = this.cat.category_list.find(category => category.category === this.productDetails.category);
+    if (selectedCategory && selectedCategory.subCategory.length > 0) {
+      this.filteredSubCategories = selectedCategory.subCategory;
+    }
     this.form.controls['subCategory'].setValue(this.productDetails.subCategory);
     this.form.controls['institution'].setValue(this.productDetails.institution._id);
     this.form.controls['operator_id'].setValue(this.productDetails.operator_id);
@@ -186,17 +199,15 @@ export class AddLiveCasesComponent implements OnInit {
 
   save() {
     if (this.form.invalid) {
-      return
+      return this.submitted=true
     } else {
-      // const formData = new FormData()
-      // formData.append('image', this.mainImageSrc)
-      // this.api.apiPostCall(formData, 'ImageUpload').subscribe(data => {
-      //   if (data.status === true) {
-      const payload = {
+      this.submitted=false
+      const formData = new FormData()
+      var payload = {
         "title": this.form.controls['title'].value,
         "youtubeUrl": this.form.controls['youtubeUrl'].value,
         "desciription": this.form.controls['desciription'].value,
-        "thumbnail": 'https://api.medstream360.com/image-1702999237801.png',
+        "thumbnail": this.mainImageSrc,
         "category": this.form.controls['category'].value,
         "subCategory": this.form.controls['subCategory'].value,
         "institution": this.form.controls['institution'].value,
@@ -206,17 +217,36 @@ export class AddLiveCasesComponent implements OnInit {
         "timeZone": localStorage.getItem('userRegion') ?  localStorage.getItem('userRegion') : null,
         // "duration": this.form.controls['duration'].value
       }
-
-      if (!this.productId) {
-        this.api.apiPostCall(payload, 'schedulecase').subscribe(data => {
-          if (data.status == true) {
-            this.snackbar.openFromComponent(SnackbarComponent, {
-              data: 'Successfully Saved',
-            });
-            this.router.navigate(['/liveCases/list'])
-          }
+      if(this.imageUpload && this.imageUpload.length){
+        formData.append('image', this.mainImageSrc)
+        this.api.apiPostCall(formData, 'ImageUpload').subscribe(data => {
+          if (data.status === true) {
+            payload['thumbnail']=data.Image
+  
+              if (!this.productId) {
+                this.api.apiPostCall(payload, 'schedulecase').subscribe(data => {
+                  if (data.status == true) {
+                    this.snackbar.openFromComponent(SnackbarComponent, {
+                      data: 'Successfully Saved',
+                    });
+                    this.router.navigate(['/liveCases/list'])
+                  }
+                })
+              } else {
+                this.api.apiPutCall(payload, 'schedulecase' +'/'+ this.productId).subscribe(data => {
+                  if (data.status == true) {
+                    this.snackbar.openFromComponent(SnackbarComponent, {
+                      data: 'Successfully Updated',
+                    });
+                    this.router.navigate(['/liveCases/list'])
+                  }
+                })
+              }
+  
+              console.log(payload)
+              }
         })
-      } else {
+      }else{
         this.api.apiPutCall(payload, 'schedulecase' +'/'+ this.productId).subscribe(data => {
           if (data.status == true) {
             this.snackbar.openFromComponent(SnackbarComponent, {
@@ -226,14 +256,10 @@ export class AddLiveCasesComponent implements OnInit {
           }
         })
       }
-
-      console.log(payload)
-      // }
-      // })
-
     }
-
   }
+
+
   onCategoryChange() {
     const selectedCategoryId = this.form.get('category')?.value;
     const selectedCategory = this.cat.category_list.find(category => category.category === selectedCategoryId);
@@ -247,9 +273,7 @@ export class AddLiveCasesComponent implements OnInit {
   // ///////////////////
   onInstitutionChange(): void {
     const selectedInstitutionId = this.form.get('institution')?.value;
-    const selectedInstitution = this.instList.find((institution: any) => institution._id === selectedInstitutionId);
-  
-    if (selectedInstitution) {
+    if (selectedInstitutionId) {
       // Fetch operators based on the selected institution and update the ops array
       this.getOperatorsForInstitution(selectedInstitutionId);
     } else {
@@ -257,14 +281,19 @@ export class AddLiveCasesComponent implements OnInit {
       this.ops = [];
     }
   }
-  getOperatorsForInstitution(institutionId: string): void {
+  async getOperatorsForInstitution(institutionId) {
     // Call your API to get operators based on the selected institution
     // Update the ops array with the fetched operators
     // Example:
-    this.api.apiGetCall(`operators?institution=${institutionId}`).subscribe((data) => {
-      this.ops = data.data;
-    });
+    return new Promise(async (resolve, reject) => {
+      this.api.apiGetCall(`operatorByInstitute/${institutionId}`).subscribe((data) => {
+        this.ops = data.data;
+       resolve(true)
+     },err => {
+       console.error('Error in getting filter api:', err);
+       reject(err)
+     })
+   })
   }
-
 }
 

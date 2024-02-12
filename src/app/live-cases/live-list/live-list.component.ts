@@ -20,7 +20,7 @@ import {
 export class LiveListComponent implements OnInit {
   dataSource = new MatTableDataSource<any>([]);
   @ViewChild(MatPaginator) scheduleCasePaginations: MatPaginator;
-  columnsToDisplay = ['s.no', 'title', 'category', 'subCategory', 'inst', 'week', 'month', 'action'];
+  columnsToDisplay = ['s.no', 'title', 'category', 'subCategory', 'inst', 'caseStart', 'caseEnd', 'action'];
   selectedValue: any;
   selectedColourValue: any;
   selectedStockValue: any
@@ -42,7 +42,7 @@ export class LiveListComponent implements OnInit {
   }
 
   getLiveCasesList(): void {
-    this.api.apiGetCall('schedulecase').subscribe((data) => {
+    this.api.apiGetCall('allschedulecase').subscribe((data) => {
       this.liveCasesList = data.data;
       this.dataSource = new MatTableDataSource(this.liveCasesList);
       this.dataSource.data = data.data.sort((a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt));

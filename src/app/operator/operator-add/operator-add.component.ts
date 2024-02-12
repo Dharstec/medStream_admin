@@ -113,10 +113,10 @@ export class OperatorAddComponent implements OnInit {
       designation: ['', Validators.required],
       introduction: ['', Validators.required],
       institution: ['', Validators.required],
-      fb: ['', Validators.required],
-      insta: ['', Validators.required],
-      x: ['', Validators.required],
-      li: ['', Validators.required],
+      fb: [''],
+      insta: [''],
+      x: [''],
+      li: [''],
     })
 
     this.activeRoute.paramMap.subscribe(params => {
@@ -144,59 +144,68 @@ export class OperatorAddComponent implements OnInit {
 
   save() {
     if (this.form.invalid) {
+      this.submitted=true
       // console.log("invalid form ", this.form.controls)
-      return this.snackbar.openFromComponent(SnackbarComponent, {
-        data: 'Enter the valid values',
-      });
+      // return this.snackbar.openFromComponent(SnackbarComponent, {
+      //   data: 'Enter the valid values',
+      // });
     } else {
       console.log("valid form ")
+      this.submitted=false
       const formData = new FormData()
-      formData.append('image', this.imageUpload[0])
-      this.api.apiPostCall(formData, 'ImageUpload').subscribe(data => {
-        if (data.status === true) {
-          const payload: any = {
-            "name": this.form.controls['name'].value,
-            "institution": this.form.controls['institution'].value,
-            "designation": this.form.controls['designation'].value,
-            "introduction": this.form.controls['introduction'].value,
-            "image": data.Image,
-            "social_media_link": {
-              "fb": this.form.controls['fb'].value,
-              "insta": this.form.controls['insta'].value,
-              "x": this.form.controls['x'].value,
-              "li": this.form.controls['li'].value
-            }
-          }
-          if (!this.productId) {
-
-            this.api.apiPostCall(payload, 'operator').subscribe(data => {
-
-              if (data.status == true) {
-                this.snackbar.openFromComponent(SnackbarComponent, {
-                  data: 'Successfully Saved',
-                });
-                this.router.navigate(['/operator/list'])
-              }
-            })
-          } else {
-            this.api.apiPutCall(payload, 'operator' + '/' + this.productId).subscribe(data => {
-              if (data.status == true) {
-                this.snackbar.openFromComponent(SnackbarComponent, {
-                  data: 'Successfully Updated',
-                });
-                this.router.navigate(['/operator/list'])
-              }
-            })
-          }
-        } else {
-          this.snackbar.openFromComponent(SnackbarComponent, {
-            data: 'Failed to upload image',
-          });
+      var payload: any = {
+        "name": this.form.controls['name'].value,
+        "institution": this.form.controls['institution'].value,
+        "designation": this.form.controls['designation'].value,
+        "introduction": this.form.controls['introduction'].value,
+        "image": this.mainImageSrc,
+        "social_media_link": {
+          "fb": this.form.controls['fb'].value,
+          "insta": this.form.controls['insta'].value,
+          "x": this.form.controls['x'].value,
+          "li": this.form.controls['li'].value
         }
-      })
-
-
-
+      }
+      if(this.imageUpload && this.imageUpload.length){
+        formData.append('image', this.imageUpload[0])
+        this.api.apiPostCall(formData, 'ImageUpload').subscribe(data => {
+          if (data.status === true) {
+            payload['image']=data.Image
+            if (!this.productId) {
+              this.api.apiPostCall(payload, 'operator').subscribe(data => {
+                if (data.status == true) {
+                  this.snackbar.openFromComponent(SnackbarComponent, {
+                    data: 'Successfully Saved',
+                  });
+                  this.router.navigate(['/operator/list'])
+                }
+              })
+            } else {
+              this.api.apiPutCall(payload, 'operator' + '/' + this.productId).subscribe(data => {
+                if (data.status == true) {
+                  this.snackbar.openFromComponent(SnackbarComponent, {
+                    data: 'Successfully Updated',
+                  });
+                  this.router.navigate(['/operator/list'])
+                }
+              })
+            }
+          } else {
+            this.snackbar.openFromComponent(SnackbarComponent, {
+              data: 'Failed to upload image',
+            });
+          }
+        })
+      }else{
+        this.api.apiPutCall(payload, 'operator' + '/' + this.productId).subscribe(data => {
+          if (data.status == true) {
+            this.snackbar.openFromComponent(SnackbarComponent, {
+              data: 'Successfully Updated',
+            });
+            this.router.navigate(['/operator/list'])
+          }
+        })
+      }
     }
   }
 
