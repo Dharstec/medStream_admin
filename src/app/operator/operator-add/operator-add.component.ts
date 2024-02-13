@@ -54,7 +54,7 @@ export class OperatorAddComponent implements OnInit {
     this.operatorsDet = data;
     this.mainImageSrc = this.operatorsDet?.avatar;
     this.form.controls['name'].setValue(this.operatorsDet.name);
-    this.form.controls['institution'].setValue(this.operatorsDet.institution);
+    this.form.controls['institution'].setValue(this.operatorsDet.institution._id);
     this.form.controls['designation'].setValue(this.operatorsDet.designation);
     this.form.controls['introduction'].setValue(this.operatorsDet.introduction);
     // this.form.controls['email'].setValue(this.operatorsDet.email);

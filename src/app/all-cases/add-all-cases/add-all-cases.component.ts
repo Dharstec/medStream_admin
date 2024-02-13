@@ -13,8 +13,6 @@ import { AllCasesService } from '../all-cases.service';
 })
 export class AddAllCasesComponent implements OnInit {
   form: FormGroup;
-  editproduct: any;
-  productview = false;
   changename: any;
   changetheproductName: any
   @ViewChild('fileInput') fileInput: ElementRef;
@@ -29,20 +27,20 @@ export class AddAllCasesComponent implements OnInit {
   noImage = "assets/noImg.png"
   url = ['test']
 
-  productId: string;
+  caseId: string;
   edit = false;
   view = false;
   uploadEnabled: boolean = true;
   result: any;
-  productDetails: any;
+  caseDetails: any;
   isSave = false;
   // ///////////////////
   instList :any;
   ops:any;
-  // cat:any;
+  cat:any;
   category:any;
   filteredSubCategories: string[] = [];
-  cat: any = {};
+  categoryList: any = {};
   imageUpload :any;
 
   constructor(private router: Router, private formBuilder: UntypedFormBuilder, private api: ApiService, private snackbar: MatSnackBar, private activeRoute: ActivatedRoute, private allSer: AllCasesService) {
@@ -53,7 +51,7 @@ export class AddAllCasesComponent implements OnInit {
     this.getOperator();
     this.getInstitutionList();
     this.initializeForm();
-    if (!this.productId) {
+    if (!this.caseId) {
       this.mainImageSrc = this.noImage;
       this.generateRandomString();
     }
@@ -70,7 +68,7 @@ export class AddAllCasesComponent implements OnInit {
   }
   getCategory(): void {
     this.api.apiGetCall('filters').subscribe((data) => {
-      this.cat = data.data;
+      this.categoryList = data.data;
       this.filteredSubCategories=[]
 
     })
@@ -138,41 +136,40 @@ export class AddAllCasesComponent implements OnInit {
       year: ['',Validators.required]
     })
     this.activeRoute.paramMap.subscribe(params => {
-      this.productId = params.get('id');
-      if (this.productId && this.router.url.includes('edit')) {
+      this.caseId = params.get('id');
+      if (this.caseId && this.router.url.includes('edit')) {
         this.edit = true;
-        this.getProductDetails(this.allSer.data);
+        this.getCaseDetails(this.allSer.data);
       } else if (this.router.url.includes('view')) {
         this.view = true;
-        this.getProductDetails(this.allSer.data);
+        this.getCaseDetails(this.allSer.data);
       }
 
     })
   }
 
-  getProductDetails(data) {
-    this.productDetails = data;
+  getCaseDetails(data) {
+    this.caseDetails = data;
     this.mainImageSrc = data.thumbnail;
-    this.mainImageSrc = data.image;
-    this.form.controls['title'].setValue(this.productDetails.title);
-    this.form.controls['youtubeUrl'].setValue(this.productDetails.youtubeUrl);
-    this.form.controls['desciription'].setValue(this.productDetails.desciription);
-    this.form.controls['category'].setValue(this.productDetails.category);
-    this.form.controls['subCategory'].setValue(this.productDetails.subCategory);
-    this.form.controls['institution'].setValue(this.productDetails.institution);
-    this.form.controls['weekNo'].setValue(this.productDetails.weekNo);
-    this.form.controls['month'].setValue(this.productDetails.month);
-    this.form.controls['caseOfTheWeek'].setValue(this.productDetails.caseOfTheWeek);
-    this.form.controls['operator'].setValue(this.productDetails.operator);
-    this.form.controls['year'].setValue(this.productDetails.year);
+    this.form.controls['title'].setValue(this.caseDetails.title);
+    this.form.controls['youtubeUrl'].setValue(this.caseDetails.youtubeUrl);
+    this.form.controls['desciription'].setValue(this.caseDetails.desciription);
+    this.form.controls['category'].setValue(this.caseDetails.category);
+    this.form.controls['subCategory'].setValue(this.caseDetails.subCategory);
+    this.form.controls['institution'].setValue(this.caseDetails.institution._id);
+    this.form.controls['weekNo'].setValue(this.caseDetails.weekNo);
+    this.form.controls['month'].setValue(this.caseDetails.month);
+    this.form.controls['caseOfTheWeek'].setValue(this.caseDetails.caseOfTheWeek);
+    this.form.controls['operator'].setValue(this.caseDetails.operator_id);
+    this.form.controls['year'].setValue(this.caseDetails.year);
     if (this.router.url.includes('view')) {
       this.form.disable();
     }
   }
 
   discard() {
-    if (this.productId) {
-      this.form.patchValue(this.productDetails);
+    if (this.caseId) {
+      this.form.patchValue(this.caseDetails);
     } else {
       this.form.reset();
     }
@@ -211,7 +208,7 @@ export class AddAllCasesComponent implements OnInit {
         "year":this.form.controls['year'].value,
         "liveStatus":false
       }
-      if (!this.productId) {
+      if (!this.caseId) {
         this.api.apiPostCall(payload, 'allcase').subscribe(data => {
           console.log(payload)
           if (data.status == true) {
@@ -222,7 +219,7 @@ export class AddAllCasesComponent implements OnInit {
           }
         })
       } else {
-        this.api.apiPutCall(payload, 'allcase' +'/'+ this.productId).subscribe(data => {
+        this.api.apiPutCall(payload, 'allcase' +'/'+ this.caseId).subscribe(data => {
           if (data.status == true) {
             this.snackbar.openFromComponent(SnackbarComponent, {
               data: 'Successfully Updated',
@@ -242,7 +239,7 @@ export class AddAllCasesComponent implements OnInit {
 
   onCategoryChange() {
     const selectedCategoryId = this.form.get('category')?.value;
-    const selectedCategory = this.cat.category_list.find(category => category.category === selectedCategoryId);
+    const selectedCategory = this.cat.category_list.find(category => category._id === selectedCategoryId);
     if (selectedCategory && selectedCategory.subCategory.length > 0) {
       this.filteredSubCategories = selectedCategory.subCategory;
     } else {

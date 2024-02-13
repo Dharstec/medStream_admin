@@ -32,7 +32,6 @@ const routes: Routes = [
       // {provide:DateTimeAdapter,deps:[OWL_DATE_TIME_LOCALE]},
       // {provide:OWL_DATE_TIME_FORMATS,useValue:My}
     ],
-    bootstrap:    [  LiveListComponent, LiveCasesComponent, AddLiveCasesComponent ],
-    schemas:[NO_ERRORS_SCHEMA,CUSTOM_ELEMENTS_SCHEMA]
+    bootstrap:    [  LiveListComponent, LiveCasesComponent, AddLiveCasesComponent ]
 })
 export class LiveCasesModule { }

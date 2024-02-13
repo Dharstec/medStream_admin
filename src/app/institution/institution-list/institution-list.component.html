@@ -51,7 +51,11 @@
                         <span>Location</span>
                     </th>
                     <td mat-cell *matCellDef="let request">
-                        <mat-icon [class]="request.location !==''? 'locAc':'locIac'">location_on</mat-icon>
+                        <div class="disFlex">
+                            <mat-icon [class]="request.city? 'locAc':'locIac'">location_on</mat-icon>
+                             {{request.city}}, {{request.country}}
+                        </div>
+                        
                     </td>
                 </ng-container>
                 <!-- <ng-container matColumnDef="operator">

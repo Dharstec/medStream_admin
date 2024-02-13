@@ -158,20 +158,17 @@ export class AddLiveCasesComponent implements OnInit {
 
   getProductDetails(data) {
     this.productDetails = data;
-    this.mainImageSrc = data.thumbnail;
+    // this.mainImageSrc = data.thumbnail;
     this.mainImageSrc = data.image;
     this.form.controls['title'].setValue(this.productDetails.title);
     this.form.controls['youtubeUrl'].setValue(this.productDetails.youtubeUrl);
     this.form.controls['desciription'].setValue(this.productDetails.desciription);
     this.form.controls['category'].setValue(this.productDetails.category);
     this.form.controls['subCategory'].setValue(this.productDetails.subCategory);
-    this.form.controls['institution'].setValue(this.productDetails.institution);
+    this.form.controls['institution'].setValue(this.productDetails.institution._id);
     this.form.controls['operator_id'].setValue(this.productDetails.operator_id);
     this.form.controls['caseStartTime'].setValue(this.productDetails.startTime);
     this.form.controls['caseEndTime'].setValue(this.productDetails.endTime);
-    // this.form.controls['date'].setValue(this.productDetails.date);
-    // this.form.controls['time'].setValue(this.productDetails.time);
-    // this.form.controls['duration'].setValue(this.productDetails.duration);
     if (this.router.url.includes('view')) {
       this.form.disable();
     }
