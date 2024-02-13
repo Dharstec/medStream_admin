@@ -14,17 +14,17 @@
           <div class="col-md-8">
             <div class="row operatorCont">
               <div class="section-b col-5">
-                <input placeholder="Name" class="input" type="text" name="Search" matInput formControlName="name" maxlength="50"
+                <input placeholder="Name" class="input" type="text" name="Search" matInput formControlName="name"
                   required>
-                <mat-hint class="hintalign">{{form.get('name').value?.length || 0}}/50
-                </mat-hint>
+                <!-- <mat-hint class="hintalign">{{form.get('name').value?.length || 0}}/50
+                </mat-hint> -->
                 <mat-error *ngIf="submitted && form.get('name')?.errors?.required">{{'Name is required'}}</mat-error>
               </div>
               <div class="section-b col-5">
                 <input placeholder="Designation" class="input" type="text" name="Search"
-                  matInput formControlName="designation" maxlength="50" required>
-                <mat-hint class="hintalign">{{form.get('designation').value?.length || 0}}/50
-                </mat-hint>
+                  matInput formControlName="designation" required>
+                <!-- <mat-hint class="hintalign">{{form.get('designation').value?.length || 0}}/50
+                </mat-hint> -->
                 <mat-error *ngIf="submitted && form.get('designation')?.errors?.required">{{'Designation is required'}}</mat-error>
               </div>
             </div>
@@ -99,19 +99,19 @@
         <div class="row socialLinksContainer">
           <div class="section-b">
             <input class="input" placeholder="Fb" type="text" name="Search" matInput formControlName="fb" >
-            <mat-error *ngIf="submitted && form.get('fb')?.errors?.required">{{'Facebook link is required'}}</mat-error>
+            <!-- <mat-error *ngIf="submitted && form.get('fb')?.errors?.required">{{'Facebook link is required'}}</mat-error> -->
           </div>
           <div class="section-b">
             <input class="input" placeholder="Insta" type="text" name="Search" matInput formControlName="insta" >
-            <mat-error *ngIf="submitted && form.get('insta')?.errors?.required">{{'Instagram link is required'}}</mat-error>
+            <!-- <mat-error *ngIf="submitted && form.get('insta')?.errors?.required">{{'Instagram link is required'}}</mat-error> -->
           </div>
           <div class="section-b">
             <input class="input" placeholder="x" type="text" name="Search" matInput formControlName="x" >
-            <mat-error *ngIf="submitted && form.get('x')?.errors?.required">{{'x link is required'}}</mat-error>
+            <!-- <mat-error *ngIf="submitted && form.get('x')?.errors?.required">{{'x link is required'}}</mat-error> -->
           </div>
           <div class="section-b">
             <input class="input" placeholder="linked In" type="text" name="Search" matInput formControlName="li" >
-            <mat-error *ngIf="submitted && form.get('li')?.errors?.required">{{'LinkedIn link is required'}}</mat-error>
+            <!-- <mat-error *ngIf="submitted && form.get('li')?.errors?.required">{{'LinkedIn link is required'}}</mat-error> -->
           </div>
         </div>        
         <div class="disflex mt-5" *ngIf="!view">

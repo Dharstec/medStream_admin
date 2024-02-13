@@ -23,7 +23,7 @@ export class AddAllCasesComponent implements OnInit {
   video: string;
   apiVideoUrl: string;
   submitted = false;
-  mainImageSrc: string;
+  mainImageSrc: string='';
   noImage = "assets/noImg.png"
   url = ['test']
 
@@ -46,11 +46,12 @@ export class AddAllCasesComponent implements OnInit {
   constructor(private router: Router, private formBuilder: UntypedFormBuilder, private api: ApiService, private snackbar: MatSnackBar, private activeRoute: ActivatedRoute, private allSer: AllCasesService) {
   }
 
-  ngOnInit(): void {
-    this.getCategory();
-    this.getOperator();
-    this.getInstitutionList();
+  async ngOnInit(): Promise<void> {
     this.initializeForm();
+    await this.getCategory();
+    // this.getOperator();
+    this.getInstitutionList();
+    this.bindCaseDetail()
     if (!this.caseId) {
       this.mainImageSrc = this.noImage;
       this.generateRandomString();
@@ -61,17 +62,23 @@ export class AddAllCasesComponent implements OnInit {
       this.instList = data.data;
     })
   }
-  getOperator(): void {
-    this.api.apiGetCall('operator').subscribe((data) => {
-      this.ops = data.data;
+  // getOperator() {
+  //   return this.api.apiGetCall('operator').subscribe((data) => {
+  //     this.ops = data.data;
+  //     // this.getOperatorsForInstitution(selectedInstitutionId);
+  //   })
+  // }
+  getCategory() {
+    return new Promise(async (resolve, reject) => {
+       this.api.apiGetCall('filters').subscribe((data) => {
+        this.categoryList = data.data;
+        resolve(true)
+      },err => {
+        console.error('Error in getting filter api:', err);
+        reject(err)
+      })
     })
-  }
-  getCategory(): void {
-    this.api.apiGetCall('filters').subscribe((data) => {
-      this.categoryList = data.data;
-      this.filteredSubCategories=[]
-
-    })
+  
   }
   generateRandomString(): string {
     const characters: string = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
@@ -135,6 +142,9 @@ export class AddAllCasesComponent implements OnInit {
       operator: ['',Validators.required],
       year: ['',Validators.required]
     })
+  }
+
+  bindCaseDetail(){
     this.activeRoute.paramMap.subscribe(params => {
       this.caseId = params.get('id');
       if (this.caseId && this.router.url.includes('edit')) {
@@ -148,13 +158,19 @@ export class AddAllCasesComponent implements OnInit {
     })
   }
 
-  getCaseDetails(data) {
+  async getCaseDetails(data) {
     this.caseDetails = data;
     this.mainImageSrc = data.thumbnail;
+    await this.getOperatorsForInstitution(this.caseDetails.institution._id);
+    // console.log("currentcaseDetails",this.caseDetails)
     this.form.controls['title'].setValue(this.caseDetails.title);
     this.form.controls['youtubeUrl'].setValue(this.caseDetails.youtubeUrl);
     this.form.controls['desciription'].setValue(this.caseDetails.desciription);
     this.form.controls['category'].setValue(this.caseDetails.category);
+    const selectedCategory = this.categoryList.category_list.find(category => category.category === this.caseDetails.category);
+    if (selectedCategory && selectedCategory.subCategory.length > 0) {
+      this.filteredSubCategories = selectedCategory.subCategory;
+    }
     this.form.controls['subCategory'].setValue(this.caseDetails.subCategory);
     this.form.controls['institution'].setValue(this.caseDetails.institution._id);
     this.form.controls['weekNo'].setValue(this.caseDetails.weekNo);
@@ -162,6 +178,7 @@ export class AddAllCasesComponent implements OnInit {
     this.form.controls['caseOfTheWeek'].setValue(this.caseDetails.caseOfTheWeek);
     this.form.controls['operator'].setValue(this.caseDetails.operator_id);
     this.form.controls['year'].setValue(this.caseDetails.year);
+    // console.log("--------",this.form)
     if (this.router.url.includes('view')) {
       this.form.disable();
     }
@@ -181,23 +198,21 @@ export class AddAllCasesComponent implements OnInit {
 
     if (this.form.invalid) {
       console.log("invalid form ", this.form.controls)
-      return this.snackbar.openFromComponent(SnackbarComponent, {
-        data: 'Enter the valid values',
-      });
+      this.submitted=true
+      // return this.snackbar.openFromComponent(SnackbarComponent, {
+      //   data: 'Enter the valid values',
+      // });
       // return
     } else {
-
       console.log("valid form ")
+      this.submitted=false
       const formData = new FormData()
-      formData.append('image', this.imageUpload[0])
-      this.api.apiPostCall(formData, 'ImageUpload').subscribe(data => {
-        if (data.status === true) {
-      const payload = {
+      var payload = {
         "title": this.form.controls['title'].value,
         "youtubeUrl": this.form.controls['youtubeUrl'].value,
         "desciription": this.form.controls['desciription'].value,
-        "filepath": data.Image,
-        "thumbnail": data.Image,
+        "filepath": this.mainImageSrc,
+        "thumbnail": this.mainImageSrc,
         "category": this.form.controls['category'].value,
         "subCategory": this.form.controls['subCategory'].value,
         "institution": this.form.controls['institution'].value,
@@ -208,17 +223,38 @@ export class AddAllCasesComponent implements OnInit {
         "year":this.form.controls['year'].value,
         "liveStatus":false
       }
-      if (!this.caseId) {
-        this.api.apiPostCall(payload, 'allcase').subscribe(data => {
-          console.log(payload)
-          if (data.status == true) {
-            this.snackbar.openFromComponent(SnackbarComponent, {
-              data: 'Successfully Saved',
-            });
-            this.router.navigate(['/allCases/list'])
-          }
+      if(this.imageUpload && this.imageUpload.length){
+        formData.append('image', this.imageUpload[0])
+        this.api.apiPostCall(formData, 'ImageUpload').subscribe(data => {
+          if (data.status === true) {
+         payload ['filepath']=data.Image
+         payload ['thumbnail']=data.Image
+        if (!this.caseId) {
+          this.api.apiPostCall(payload, 'allcase').subscribe(data => {
+            if (data.status == true) {
+              this.snackbar.openFromComponent(SnackbarComponent, {
+                data: 'Successfully Saved',
+              });
+              this.router.navigate(['/allCases/list'])
+            }
+          })
+        } else {
+          this.api.apiPutCall(payload, 'allcase' +'/'+ this.caseId).subscribe(data => {
+            if (data.status == true) {
+              this.snackbar.openFromComponent(SnackbarComponent, {
+                data: 'Successfully Updated',
+              });
+              this.router.navigate(['/allCases/list'])
+            }
+          })
+        }
+        } else {
+          this.snackbar.openFromComponent(SnackbarComponent, {
+            data: 'Failed to upload image',
+          });
+        }
         })
-      } else {
+      }else{
         this.api.apiPutCall(payload, 'allcase' +'/'+ this.caseId).subscribe(data => {
           if (data.status == true) {
             this.snackbar.openFromComponent(SnackbarComponent, {
@@ -228,18 +264,14 @@ export class AddAllCasesComponent implements OnInit {
           }
         })
       }
-      } else {
-        this.snackbar.openFromComponent(SnackbarComponent, {
-          data: 'Failed to upload image',
-        });
-      }
-      })
+     
     }
   }
 
   onCategoryChange() {
     const selectedCategoryId = this.form.get('category')?.value;
-    const selectedCategory = this.cat.category_list.find(category => category._id === selectedCategoryId);
+    // console.log("---",this.categoryList)
+    const selectedCategory = this.categoryList.category_list.find(category => category.category === selectedCategoryId);
     if (selectedCategory && selectedCategory.subCategory.length > 0) {
       this.filteredSubCategories = selectedCategory.subCategory;
     } else {
@@ -260,19 +292,26 @@ export class AddAllCasesComponent implements OnInit {
   // }
   onInstitutionChange(): void {
     const selectedInstitutionId = this.form.get('institution')?.value;
-    const selectedInstitution = this.instList.find((institution: any) => institution._id === selectedInstitutionId);
-  
-    if (selectedInstitution) {
+    if (selectedInstitutionId) {
+      // Fetch operators based on the selected institution and update the ops array
       this.getOperatorsForInstitution(selectedInstitutionId);
     } else {
       this.ops = [];
     }
   }
-  
-  getOperatorsForInstitution(institutionId: string): void {
-    this.api.apiGetCall(`operator?institute=${institutionId}`).subscribe((data) => {
-      this.ops = data.data;
-    });
+  async getOperatorsForInstitution(institutionId) {
+    // Call your API to get operators based on the selected institution
+    // Update the ops array with the fetched operators
+    // Example:
+    return new Promise(async (resolve, reject) => {
+      this.api.apiGetCall(`operatorByInstitute/${institutionId}`).subscribe((data) => {
+        this.ops = data.data;
+       resolve(true)
+     },err => {
+       console.error('Error in getting filter api:', err);
+       reject(err)
+     })
+   })
   }
 
 }
