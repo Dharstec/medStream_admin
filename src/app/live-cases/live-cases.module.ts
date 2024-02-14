@@ -27,7 +27,9 @@ const routes: Routes = [
     LiveListComponent, LiveCasesComponent, AddLiveCasesComponent
   ],
   imports: [CommonModule, MaterialModule, ReactiveFormsModule,FormsModule, RouterModule.forChild(routes),
-    OwlDateTimeModule,OwlNativeDateTimeModule],
+    OwlDateTimeModule,
+    OwlNativeDateTimeModule
+  ],
     providers:[DatePipe,
       // {provide:DateTimeAdapter,deps:[OWL_DATE_TIME_LOCALE]},
       // {provide:OWL_DATE_TIME_FORMATS,useValue:My}
