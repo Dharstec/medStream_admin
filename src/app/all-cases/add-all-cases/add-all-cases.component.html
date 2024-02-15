@@ -72,7 +72,7 @@
             <div class="row">
                 <div class="section-b col-4">
                     <mat-select style="margin: 0 !important;" placeholder="Category" formControlName="category" (selectionChange)="onCategoryChange()">
-                        <mat-option *ngFor="let category of cat.category_list" [value]="category._id">{{ category.category }}</mat-option>
+                        <mat-option *ngFor="let category of categoryList.category_list" [value]="category.category">{{ category.category }}</mat-option>
                     </mat-select>
                     <mat-error *ngIf="submitted && form.get('category')?.errors?.required">{{'Category is required'}}</mat-error>
                 </div>
@@ -131,8 +131,11 @@
                     <mat-error *ngIf="submitted && form.get('year')?.errors?.required">{{'Year is required'}}</mat-error>
                 </div>
                 <div class="section-b col-3">
-                    <input  style="margin: 0  !important;" placeholder="Case of the Week" class="input" type="text" name="Search" matInput
-                        formControlName="caseOfTheWeek"  required> 
+                    <mat-select class="m-0" placeholder="Case of the Week" formControlName="caseOfTheWeek">
+                        <mat-option *ngFor="let row of caseOfTheWeekList" [value]="row">{{row}}</mat-option>
+                      </mat-select>
+                    <!-- <input  style="margin: 0  !important;" placeholder="Case of the Week" class="input" type="text" name="Search" matInput
+                        formControlName="caseOfTheWeek"  required>  -->
                     <mat-error *ngIf="submitted && form.get('caseOfTheWeek')?.errors?.required">{{'case of the Week is required'}}</mat-error>
                 </div>
             </div>

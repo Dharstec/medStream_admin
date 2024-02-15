@@ -2,10 +2,15 @@
     <div class="card">
         <div class="row" style="display:flex;flex-direction: row;align-items: center;">
             <div class="section-b col-md-3">
-                <input class="input m-3" (keyup)="applyFilter($event.target.value)" type="text" name="Search" placeholder="Search...">
+                <input class="input m-3" (keyup)="applyFilter($event.target.value)" [formControl]="search" type="text" name="Search" placeholder="Search...">
             </div>
-            <div class="col-md-6" style="display:flex ;justify-content:flex-start;gap:10px">
+            <div class="col-md-4" style="display:flex ;justify-content:flex-start;gap:10px">
             </div>
+            <mat-form-field style="width: 16%;">
+                <mat-select placeholder="Case of the Week" [formControl]="caseOfTheWeek" multiple (selectionChange)="applyCaseFilter()">
+                  <mat-option *ngFor="let list of caseOfTheWeekList" [value]="list">{{list}}</mat-option>
+                </mat-select>
+              </mat-form-field>
             <div class="add-coupon col-md-3">
                 <a routerLink="/allCases/add">+&nbsp;{{'Add New Cases'}}</a>
             </div>

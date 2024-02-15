@@ -40,8 +40,9 @@ export class AddAllCasesComponent implements OnInit {
   cat:any;
   category:any;
   filteredSubCategories: string[] = [];
-  categoryList: any = {};
+  categoryList: any ={}
   imageUpload :any;
+  caseOfTheWeekList=["Yes","No"]
 
   constructor(private router: Router, private formBuilder: UntypedFormBuilder, private api: ApiService, private snackbar: MatSnackBar, private activeRoute: ActivatedRoute, private allSer: AllCasesService) {
   }
@@ -236,15 +237,23 @@ export class AddAllCasesComponent implements OnInit {
                 data: 'Successfully Saved',
               });
               this.router.navigate(['/allCases/list'])
+            }else{
+              this.snackbar.openFromComponent(SnackbarComponent, {
+                data: data.message //'Successfully Updated',
+              });
             }
           })
         } else {
           this.api.apiPutCall(payload, 'allcase' +'/'+ this.caseId).subscribe(data => {
             if (data.status == true) {
               this.snackbar.openFromComponent(SnackbarComponent, {
-                data: 'Successfully Updated',
+                data:  data.message //'Successfully Updated',
               });
               this.router.navigate(['/allCases/list'])
+            }else{
+              this.snackbar.openFromComponent(SnackbarComponent, {
+                data: data.message //'Successfully Updated',
+              });
             }
           })
         }
@@ -258,9 +267,13 @@ export class AddAllCasesComponent implements OnInit {
         this.api.apiPutCall(payload, 'allcase' +'/'+ this.caseId).subscribe(data => {
           if (data.status == true) {
             this.snackbar.openFromComponent(SnackbarComponent, {
-              data: 'Successfully Updated',
+              data: data.message //'Successfully Updated',
             });
             this.router.navigate(['/allCases/list'])
+          }else{
+            this.snackbar.openFromComponent(SnackbarComponent, {
+              data: data.message //'Successfully Updated',
+            });
           }
         })
       }

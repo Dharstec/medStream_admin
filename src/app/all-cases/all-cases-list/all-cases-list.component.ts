@@ -14,6 +14,7 @@ import {
 import {
   MediaMatcher
 } from '@angular/cdk/layout';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-all-cases-list',
@@ -33,6 +34,9 @@ export class AllCasesListComponent implements OnInit {
   originalData: any[];
   noData = false;
   pageSize: number=5;
+  caseOfTheWeek = new FormControl();
+  search = new FormControl();
+  caseOfTheWeekList=["Yes","No"]
 
   constructor(private api: ApiService, public dialog: MatDialog, private snackbar: MatSnackBar,
     private media: MediaMatcher, private router: Router, private allSer: AllCasesService) {
@@ -72,6 +76,28 @@ export class AllCasesListComponent implements OnInit {
   // ngAfterViewInit() {
   //   this.dataSource.paginator = this.allCasePaginations;
   // }
+
+  applyCaseFilter() {
+    this.search.setValue('')
+    this.dataSource.filter=''
+    // console.log("caseOfTheWeek",this.caseOfTheWeek.value)
+    // console.log("allCases",this.allCases)
+    if (this.caseOfTheWeek?.value.length) {
+      this.dataSource.data= this.allCases.filter(item => {
+        if (this.caseOfTheWeek?.value.length && !this.caseOfTheWeek?.value?.includes(item.caseOfTheWeek)) {
+          return false;
+        }
+        return true;
+      });
+      this.noData = this.dataSource.data.length ? false : true
+      // console.log(" this.dataSource.data", this.dataSource.data)
+    } else {
+      this.dataSource = new MatTableDataSource(this.allCases);
+      this.dataSource.filter=''
+      this.dataSource.paginator = this.allCasePaginations;
+      this.noData = false
+    }
+  }
 
   delete(id: string): void {
     const dialog = this.dialog.open(ConfirmDialogComponent, {
