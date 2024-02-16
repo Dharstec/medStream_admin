@@ -218,7 +218,7 @@ export class AddLiveCasesComponent implements OnInit {
         // "duration": this.form.controls['duration'].value
       }
       if(this.imageUpload && this.imageUpload.length){
-        formData.append('image', this.mainImageSrc)
+        formData.append('image', this.imageUpload[0])
         this.api.apiPostCall(formData, 'ImageUpload').subscribe(data => {
           if (data.status === true) {
             payload['thumbnail']=data.Image
