@@ -15,6 +15,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   form: FormGroup;
   submitted = false;
   starCount = new Array(500); // Number of stars
+  hidePassword = true;
 
   constructor(private fb: FormBuilder, private router: Router, private api: ApiService,private snackbar: MatSnackBar) { }
 
@@ -55,6 +56,10 @@ export class LoginComponent implements OnInit, OnDestroy {
         });
       })
     }
+  }
+  
+  togglePasswordVisibility() {
+    this.hidePassword = !this.hidePassword;
   }
 
   ngOnDestroy() {

@@ -13,6 +13,8 @@ export class ResetPasswordComponent implements OnInit {
   
   form: FormGroup;
   submitted = false;
+  hideNewPassword: boolean = true;
+  hideConfirmPassword: boolean = true;
 
   constructor(
     private fb: FormBuilder, 
@@ -70,6 +72,14 @@ export class ResetPasswordComponent implements OnInit {
         });
       });
     }
+  }
+
+  toggleNewPasswordVisibility(): void {
+    this.hideNewPassword = !this.hideNewPassword;
+  }
+
+  toggleConfirmPasswordVisibility(): void {
+    this.hideConfirmPassword = !this.hideConfirmPassword;
   }
 }
 
