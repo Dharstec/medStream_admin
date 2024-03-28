@@ -1,12 +1,12 @@
 <div class="container">
     <div class="card">
-        <div class="row" style="display:flex;flex-direction: row;align-items: center;">
+        <div class="row m-0" style="display:flex;flex-direction: row;align-items: center;">
             <div class="section-b col-md-3">
-                <input class="input m-3" (keyup)="applyFilter($event.target.value)" [formControl]="search" type="text" name="Search" placeholder="Search...">
+                <input class="input mt-2 mb-2" (keyup)="applyFilter($event.target.value)" [formControl]="search" type="text" name="Search" placeholder="Search...">
             </div>
-            <div class="col-md-4" style="display:flex ;justify-content:flex-start;gap:10px">
-            </div>
-            <mat-form-field style="width: 16%;">
+            <!-- <div class="col-md-4" style="display:flex ;justify-content:flex-start;gap:10px">
+            </div> -->
+            <mat-form-field class="m-auto">
                 <mat-select placeholder="Case of the Week" [formControl]="caseOfTheWeek" multiple (selectionChange)="applyCaseFilter()">
                   <mat-option *ngFor="let list of caseOfTheWeekList" [value]="list">{{list}}</mat-option>
                 </mat-select>

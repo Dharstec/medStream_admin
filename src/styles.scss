@@ -68,7 +68,8 @@ body {
 }
 
 .mdc-text-field--filled:not(.mdc-text-field--disabled) {
-  background-color: transparent !important;
+  // background-color: transparent !important;
+  background-color: #111111 !important;
   // padding-left: 300px;
 }
 

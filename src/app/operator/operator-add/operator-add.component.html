@@ -6,7 +6,7 @@
         {{'Operators'}}</h2>
     </div>
     <div class="card">
-      <h4 style="padding:0px !important ;margin:0px !important;font-weight: 600;color: #f24c44;">{{'operator Detail'}}</h4>
+      <h4 style="padding:0px !important ;margin:0px !important;font-weight: 600;color: #f24c44;">{{'Operator Detail'}}</h4>
       <hr class="new4">    
       <form [formGroup]="form">
         <div class="row">
@@ -30,7 +30,7 @@
             </div>
   
             <div class="row">
-              <div class="section-b col-5">
+              <div class="section-b responsive col-5">
                 <input class="input"  placeholder="Introduction" type="text"  name="Search"
                   matInput formControlName="introduction" required>
                   <!-- maxlength="50"  -->
@@ -44,8 +44,7 @@
             <div>
               <div id="images">
                   <div id="main-img-holder">
-                      <img id="main-img" [src]="mainImageSrc" alt="main-img"
-                          style="width:310px;height:195px;border-radius: 10px" />
+                      <img id="main-img" class="add_img" [src]="mainImageSrc" alt="main-img" />
                       <div class="upload-icon-container">
                           <label for="image-upload-input" class="upload-icon-label">
                               <span class="cursor-pointer"><i style="color: white;"
@@ -62,8 +61,11 @@
           </div>
           </div>
         </div>
-        <h4 style="padding:0px !important ;margin:25px 0px 0px 0px !important;font-weight: 600;color: #f24c44;">{{'Institute Detail'}}</h4>
-        <hr class="new4">
+        <div class="">
+          <h4 style="padding:0px !important ;margin:25px 0px 0px 0px !important;font-weight: 600;color: #f24c44;">{{'Institute Detail'}}</h4>
+          <hr class="new4">
+        </div>
+     
         <div class="row">
             <div class="section-b col-6 instituteCol">
               <mat-select  placeholder="Institution" formControlName="institution" >

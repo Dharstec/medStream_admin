@@ -1,7 +1,7 @@
 <div class="sidenav" [ngClass]="collapsed ? 'sidenav-collapsed':''">
     <div class="logo-container">
             <!-- <img class="logo" src="assets\med.png" (click)="toggleCollapse()"> -->
-            <button class="btn-close logo"  (click)="toggleCollapse()">
+            <button class="btn-close logo" *ngIf="!collapsed"  (click)="toggleCollapse()">
               <mat-icon class="iconsmat">menu</mat-icon>
           </button>
             <div class="logo-text" *ngIf="collapsed"><img style="width:9rem" src="assets\med.png">
