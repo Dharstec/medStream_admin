@@ -45,8 +45,10 @@ export class AddLiveCasesComponent implements OnInit {
   cat: any = {};
   imageUpload :any;
 
-  constructor(private router: Router, private formBuilder: UntypedFormBuilder, private api: ApiService, private snackbar: MatSnackBar, private activeRoute: ActivatedRoute, private liveSer: LiveCasesService) {
+  textName=''
 
+  constructor(private router: Router, private formBuilder: UntypedFormBuilder, private api: ApiService, private snackbar: MatSnackBar, private activeRoute: ActivatedRoute, private liveSer: LiveCasesService) {
+    this.textName = this.router.url.includes('view') ? 'View' :  this.router.url.includes('edit') ? 'Edit' : 'Add'
   }
 
   async ngOnInit(): Promise<void> {

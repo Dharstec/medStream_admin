@@ -37,8 +37,10 @@ export class OperatorAddComponent implements OnInit {
   instList: any;
   imageUpload: any
 
-  constructor(private router: Router, private formBuilder: UntypedFormBuilder, private api: ApiService, private snackbar: MatSnackBar, private activeRoute: ActivatedRoute, private opeSer: OperatorService) {
+  textName=''
 
+  constructor(private router: Router, private formBuilder: UntypedFormBuilder, private api: ApiService, private snackbar: MatSnackBar, private activeRoute: ActivatedRoute, private opeSer: OperatorService) {
+    this.textName = this.router.url.includes('view') ? 'View' :  this.router.url.includes('edit') ? 'Edit' : 'Add'
   }
 
   ngOnInit(): void {

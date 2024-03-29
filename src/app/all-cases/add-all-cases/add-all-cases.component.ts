@@ -43,8 +43,10 @@ export class AddAllCasesComponent implements OnInit {
   categoryList: any ={}
   imageUpload :any;
   caseOfTheWeekList=["Yes","No"]
+  textName = ''
 
   constructor(private router: Router, private formBuilder: UntypedFormBuilder, private api: ApiService, private snackbar: MatSnackBar, private activeRoute: ActivatedRoute, private allSer: AllCasesService) {
+      this.textName = this.router.url.includes('view') ? 'View' :  this.router.url.includes('edit') ? 'Edit' : 'Add'
   }
 
   async ngOnInit(): Promise<void> {
@@ -162,6 +164,9 @@ export class AddAllCasesComponent implements OnInit {
   async getCaseDetails(data) {
     this.caseDetails = data;
     this.mainImageSrc = data.thumbnail;
+    if (this.router.url.includes('view')) {
+      this.form.disable();
+    }
     await this.getOperatorsForInstitution(this.caseDetails.institution._id);
     // console.log("currentcaseDetails",this.caseDetails)
     this.form.controls['title'].setValue(this.caseDetails.title);
@@ -180,9 +185,9 @@ export class AddAllCasesComponent implements OnInit {
     this.form.controls['operator'].setValue(this.caseDetails.operator_id);
     this.form.controls['year'].setValue(this.caseDetails.year);
     // console.log("--------",this.form)
-    if (this.router.url.includes('view')) {
-      this.form.disable();
-    }
+    // if (this.router.url.includes('view')) {
+    //      this.form.disable();
+    // }
   }
 
   discard() {
@@ -316,7 +321,7 @@ export class AddAllCasesComponent implements OnInit {
     // Call your API to get operators based on the selected institution
     // Update the ops array with the fetched operators
     // Example:
-    return new Promise(async (resolve, reject) => {
+    return new Promise((resolve, reject) => {
       this.api.apiGetCall(`operatorByInstitute/${institutionId}`).subscribe((data) => {
         this.ops = data.data;
        resolve(true)

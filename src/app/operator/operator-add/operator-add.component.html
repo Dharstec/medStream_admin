@@ -2,7 +2,7 @@
     <div class="card-title">
       <i class="fa fa-arrow-left" style="font-size:20px;cursor: pointer;color: white;" routerLink="/operator/list"></i>&nbsp;&nbsp;
       <h2 style="padding:0px !important ;margin:0px !important;font-weight: 600;color:white;font-size: 18px;
-      margin: 10px 0px 10px 0px !important;">Add
+      margin: 10px 0px 10px 0px !important;">{{textName}}
         {{'Operators'}}</h2>
     </div>
     <div class="card">
@@ -46,7 +46,7 @@
                   <div id="main-img-holder">
                       <img id="main-img" class="add_img" [src]="mainImageSrc" alt="main-img" />
                       <div class="upload-icon-container">
-                          <label for="image-upload-input" class="upload-icon-label">
+                          <label for="image-upload-input" class="upload-icon-label" [ngStyle]="{'display': textName=='View' ? 'none' : 'block' }">
                               <span class="cursor-pointer"><i style="color: white;"
                                       class="fa fa-upload fa-2x"></i>
                                   <p style="color: white;margin: 10px;"  *ngIf="mainImageSrc.includes('noImg.png')">Upload Thumbnail</p>

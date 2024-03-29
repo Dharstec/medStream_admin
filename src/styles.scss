@@ -98,6 +98,10 @@ body {
   background-color: #f3f3f9 !important;
 }
 
+.mdc-text-field--disabled.mdc-text-field--filled {
+  background-color: #000;
+}
+
 // .mat-form-field-wrapper{
 //   padding-bottom: !important
 // }

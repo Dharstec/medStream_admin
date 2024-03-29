@@ -3,7 +3,7 @@
         <i class="fa fa-arrow-left" style="font-size:20px;cursor: pointer;color: white;"
             routerLink="/liveCases/list"></i>&nbsp;&nbsp;
         <h2 style="padding:0px !important ;margin:0px !important;font-weight: 600;color:white;font-size: 18px;
-      margin: 10px 0px 10px 0px !important;">Add
+      margin: 10px 0px 10px 0px !important;">{{textName}}
             {{'Scheduled Cases'}}</h2>
     </div>
     <div class="card">
@@ -30,7 +30,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-10">
+                <div class="col-md-8">
 
                     <div class="row">
                         <div class="section-b col">
@@ -45,14 +45,13 @@
 
                     </div>
                 </div>
-                <div class="col-md-2" style="display: flex;justify-content: center;">
+                <div class="col-md-4" style="display: flex;justify-content: center;">
                     <div>
                         <div id="images">
                             <div id="main-img-holder">
-                                <img id="main-img" [src]="mainImageSrc" alt="main-img"
-                                    style="width:250px;height:120px;border-radius: 10px;margin-top:5px" />
+                                <img id="main-img" class="add_img" [src]="mainImageSrc" alt="main-img"/>
                                 <div class="upload-icon-container">
-                                    <label for="image-upload-input" class="upload-icon-label">
+                                    <label for="image-upload-input" class="upload-icon-label" [ngStyle]="{'display': textName=='View' ? 'none' : 'block' }">
                                         <span class="cursor-pointer"><i style="color: white;"
                                                 class="fa fa-upload fa-2x"></i>
                                             <p style="color: white;margin: 10px;"  *ngIf="mainImageSrc.includes('noImg.png')">Upload Thumbnail</p>
@@ -84,13 +83,13 @@
             </div> -->
 
             <div class="row">
-                <div class="section-b col-4">
+                <div class="section-b tablet_res col-4">
                     <mat-select style="margin: 0 !important;" placeholder="Category" formControlName="category" (selectionChange)="onCategoryChange()">
                         <mat-option *ngFor="let category of cat.category_list" [value]="category.category">{{ category.category }}</mat-option>
                     </mat-select>
                     <mat-error *ngIf="submitted && form.get('category')?.errors?.required">{{'Category is required'}}</mat-error>
                 </div>
-                <div class="section-b col-4">
+                <div class="section-b tablet_res col-4">
                     <mat-select style="margin: 0 !important;" placeholder="Sub Category" formControlName="subCategory">
                             <mat-option *ngFor="let subCategory of filteredSubCategories" [value]="subCategory">{{ subCategory }}</mat-option>
                     </mat-select>
@@ -111,7 +110,7 @@
             <h4 style="padding:0px !important ;margin:25px 0px 0px 0px !important;font-weight: 600;color: #f24c44;">{{'Operators Detail'}}</h4>
             <hr class="new4">
             <div class="row">
-                <div class="section-b col-4">
+                <div class="section-b operatorCol col-4">
                     <mat-select placeholder="Select Operators" formControlName="operator_id" multiple>
                         <mat-option *ngFor="let row of ops" [value]="row._id">{{row.name}}</mat-option>
                       </mat-select>
@@ -123,7 +122,7 @@
             <h4 style="padding:0px !important ;margin:25px 0px 0px 0px!important;font-weight: 600;color: #f24c44;">Case Time</h4>
             <hr class="new4">
             <div class="row">
-                <div  class="section-b col-4">
+                <div  class="section-b mbl_res col-4">
                     <mat-form-field class="example-full-width owl_field_color">
                         <input matInput readonly [owlDateTime]="dt1" placeholder="Case Start Time" [min]="currentDate" (ngModelChange)="changeCaseTime()"   formControlName="caseStartTime" >
                         <span [owlDateTimeTrigger]="dt1"><i  class="fa fa-calendar"></i></span>
@@ -131,7 +130,7 @@
                     </mat-form-field>
                   
                 </div>
-                <div  class="section-b col-4">
+                <div  class="section-b mbl_res col-4">
                     <mat-form-field class="example-full-width owl_field_color">
                         <input matInput readonly [owlDateTime]="dt2" placeholder="Case End Time" [min]="form.get('caseStartTime').value"  formControlName="caseEndTime" >
                         <span [owlDateTimeTrigger]="dt2"><i class="fa fa-calendar"></i></span>

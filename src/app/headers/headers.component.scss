@@ -79,7 +79,7 @@
                     .head-menu-item-btn:hover,
                     .head-menu-item-btn:focus {
                         background: #eff2f3;
-
+                        // background-color: #2E2E2E;
                         .menu-icon {
                             color: #699dfa;
                         }
@@ -160,7 +160,7 @@
     justify-content: space-between;
     // padding: 2px 15px 2px 15px;
     padding: 0 20px;
-    cursor: pointer;
+    cursor: default;
     row-gap: 10px;
     overflow-x: hidden !important;
 }
@@ -173,6 +173,7 @@
     margin-top: 5px;
     padding-left: 10px;
     padding-right: 10px;
+    cursor: default;
   }
  
   mat-icon {

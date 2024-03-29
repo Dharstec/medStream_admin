@@ -42,8 +42,11 @@ export class InstitutionAddComponent implements OnInit {
     {"name":"South America"}
   ]
 
+  textName =''
+
   
   constructor(private router: Router, private formBuilder: UntypedFormBuilder, private api: ApiService, private snackbar: MatSnackBar, private activeRoute: ActivatedRoute, private insSer: InstitutionService) {
+    this.textName = this.router.url.includes('view') ? 'View' :  this.router.url.includes('edit') ? 'Edit' : 'Add'
   }
 
   ngOnInit(): void {
