@@ -1,15 +1,18 @@
 <div class="container">
     <div class="card">
-        <div class="row" style="display:flex;flex-direction: row;align-items: center;">
+        <div class="row m-0" style="display:flex;flex-direction: row;align-items: center;">
             <div class="section-b col-md-3">
-                <input class="input m-3" (keyup)="applyFilter($event.target.value)" type="text" name="Search"
+                <input class="input mt-2 mb-2" (keyup)="applyFilter($event.target.value)" type="text" name="Search"
                     placeholder="Search...">
             </div>
-            <mat-form-field class="col-md-6">
-                <mat-select placeholder="Select Institution">
-                  <mat-option *ngFor="let institution of institutionList">{{ institution.name }}</mat-option>
-                </mat-select>
-              </mat-form-field>                          
+            <div class="col-md-6">
+                <mat-form-field >
+                    <mat-select placeholder="Select Institution">
+                      <mat-option *ngFor="let institution of institutionList">{{ institution.name }}</mat-option>
+                    </mat-select>
+                  </mat-form-field>  
+            </div>
+                               
             <!-- <div class="col-md-6" style="display:flex ;justify-content:flex-start;gap:10px">
             </div> -->
             <div class="add-coupon col-md-3">
