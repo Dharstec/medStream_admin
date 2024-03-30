@@ -3,7 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { LiveCasesComponent } from './live-cases/live-cases.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'auth/login', pathMatch: 'full' },
+  { path: '', redirectTo: 'auth', pathMatch: 'full' },
   // { path: '', redirectTo: 'liveCases/list', pathMatch: 'full' },
   { path: 'auth', loadChildren: () => (import('./auth/auth.module')).then((m) => m.AuthModule) },
   { path: 'liveCases', loadChildren: () => (import('./live-cases/live-cases.module')).then((m) => m.LiveCasesModule) },

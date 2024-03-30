@@ -32,7 +32,7 @@ export class ErrorInterceptor implements HttpInterceptor {
                 //     // tslint:disable-next-line: deprecation
                 //     location.reload();
                 // }
-                this.router.navigate(['/login']);
+                this.router.navigate(['/auth/login']);
             }
             const error = err.error.message || err.statusText;
             return throwError(error);
