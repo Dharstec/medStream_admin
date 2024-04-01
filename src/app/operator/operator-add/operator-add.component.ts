@@ -62,8 +62,8 @@ export class OperatorAddComponent implements OnInit {
     // this.form.controls['email'].setValue(this.operatorsDet.email);
     this.form.controls['fb'].setValue(this.operatorsDet.social_media_link.fb);
     this.form.controls['insta'].setValue(this.operatorsDet.social_media_link.insta);
-    this.form.controls['x'].setValue(this.operatorsDet.social_media_link.x);
-    this.form.controls['li'].setValue(this.operatorsDet.social_media_link.li);
+    this.form.controls['x'].setValue(this.operatorsDet.social_media_link.twitter);
+    this.form.controls['li'].setValue(this.operatorsDet.social_media_link.linkedIn);
 
     if (this.router.url.includes('view')) {
       this.form.disable();
@@ -164,8 +164,8 @@ export class OperatorAddComponent implements OnInit {
         "social_media_link": {
           "fb": this.form.controls['fb'].value,
           "insta": this.form.controls['insta'].value,
-          "x": this.form.controls['x'].value,
-          "li": this.form.controls['li'].value
+          "twitter": this.form.controls['x'].value,
+          "linkedIn": this.form.controls['li'].value
         }
       }
       if(this.imageUpload && this.imageUpload.length){
