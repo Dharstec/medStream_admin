@@ -29,6 +29,7 @@
     "ng-gapi": "0.0.94",
     "ng-pick-datetime": "^7.0.0",
     "ngx-barcode": "^0.3.0",
+    "ngx-spinner": "^15.0.1",
     "puppeteer": "^21.1.1",
     "rxjs": "~6.6.0",
     "tslib": "^2.3.0",

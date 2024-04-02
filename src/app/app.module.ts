@@ -20,6 +20,7 @@ import { ErrorInterceptor } from './services/core/error-interceptor';
 import { JwtInterceptor } from './services/core/jwt-interceptor';
 import { AuthGuard } from './services/core/auth.guard';
 import { OwlDateTimeModule,OwlNativeDateTimeModule } from 'ng-pick-datetime';
+import { NgxSpinnerModule } from 'ngx-spinner';
 
 
 @NgModule({
@@ -45,6 +46,7 @@ import { OwlDateTimeModule,OwlNativeDateTimeModule } from 'ng-pick-datetime';
     SharedModule,SplashScreenModule,
     OwlDateTimeModule,
     OwlNativeDateTimeModule,
+    NgxSpinnerModule,
   ],
 
   providers: [DatePipe,AuthGuard,

@@ -7,6 +7,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from '../material.module';
 import { InstitutionAddComponent } from './institution-add/institution-add.component';
 import { AuthGuard } from '../services/core/auth.guard';
+import { NgxSpinnerModule } from 'ngx-spinner';
 
 const routes: Routes = [
   {
@@ -26,7 +27,7 @@ const routes: Routes = [
   declarations: [
     InstitutionListComponent,InstitutionComponent, InstitutionAddComponent
   ],
-  imports: [CommonModule, MaterialModule, ReactiveFormsModule, RouterModule.forChild(routes)],
+  imports: [NgxSpinnerModule,CommonModule, MaterialModule, ReactiveFormsModule, RouterModule.forChild(routes)],
 
 })
 export class InstitutionModule { }

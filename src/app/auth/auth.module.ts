@@ -10,6 +10,7 @@ import { ForgetPasswordComponent } from './forget-password/forget-password.compo
 import { FormsModule } from '@angular/forms';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 import { OtpComponent } from './otp/otp.component';
+import { NgxSpinnerModule } from 'ngx-spinner';
 const routes: Routes = [
   {
     path: '',
@@ -33,7 +34,7 @@ const routes: Routes = [
     OtpComponent,
   ],
   imports: [
-    CommonModule, RouterModule.forChild(routes), ReactiveFormsModule, MaterialModule, FormsModule
+    NgxSpinnerModule,CommonModule, RouterModule.forChild(routes), ReactiveFormsModule, MaterialModule, FormsModule
   ]
 })
 export class AuthModule { }

@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
+import { NgxSpinnerService } from 'ngx-spinner';
 import { ApiService } from 'src/app/services/api.service';
 import { SnackbarComponent } from 'src/app/shared-module/snackbar/snackbar.component';
 
@@ -17,7 +18,9 @@ export class LoginComponent implements OnInit, OnDestroy {
   starCount = new Array(500); // Number of stars
   hidePassword = true;
 
-  constructor(private fb: FormBuilder, private router: Router, private api: ApiService,private snackbar: MatSnackBar) { }
+  constructor(private fb: FormBuilder,
+    private spinner:NgxSpinnerService,
+    private router: Router, private api: ApiService,private snackbar: MatSnackBar) { }
 
   ngOnInit(): void {
     this.form = this.fb.group({
@@ -42,6 +45,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     if (this.form.invalid) {
       return;
     } else {
+      this.spinner.show()
       const payload = {
         email: this.form.controls['email'].value,
         password: this.form.controls['password'].value
@@ -56,15 +60,18 @@ export class LoginComponent implements OnInit, OnDestroy {
           this.snackbar.openFromComponent(SnackbarComponent, {
             data: 'LoggedIn Successfully',
           });
+          this.spinner.hide()
         }else{
           this.snackbar.openFromComponent(SnackbarComponent, {
             data: 'Failed to LoggedIn',
           }); 
+          this.spinner.hide()
         }
       },error=>{
         this.snackbar.openFromComponent(SnackbarComponent, {
           data: error,
         });
+        this.spinner.hide()
       })
     }
   }

@@ -7,6 +7,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { MaterialModule } from '../material.module';
 import { AddAllCasesComponent } from './add-all-cases/add-all-cases.component';
 import { AuthGuard } from '../services/core/auth.guard';
+import { NgxSpinnerModule } from 'ngx-spinner';
 
 const routes: Routes = [
   {
@@ -26,7 +27,7 @@ const routes: Routes = [
   declarations: [
     AllCasesListComponent,AllCasesComponent, AddAllCasesComponent
   ],
-  imports: [CommonModule, MaterialModule, ReactiveFormsModule, RouterModule.forChild(routes)],
+  imports: [CommonModule,NgxSpinnerModule, MaterialModule, ReactiveFormsModule, RouterModule.forChild(routes)],
 
 })
 export class AllCasesModule { }

@@ -5,6 +5,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { ApiService } from 'src/app/services/api.service';
 import { InstitutionService } from '../institution.service';
 import { SnackbarComponent } from 'src/app/shared-module/snackbar/snackbar.component';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-institution-add',
@@ -45,7 +46,9 @@ export class InstitutionAddComponent implements OnInit {
   textName =''
 
   
-  constructor(private router: Router, private formBuilder: UntypedFormBuilder, private api: ApiService, private snackbar: MatSnackBar, private activeRoute: ActivatedRoute, private insSer: InstitutionService) {
+  constructor(private router: Router,
+    private spinner:NgxSpinnerService,
+     private formBuilder: UntypedFormBuilder, private api: ApiService, private snackbar: MatSnackBar, private activeRoute: ActivatedRoute, private insSer: InstitutionService) {
     this.textName = this.router.url.includes('view') ? 'View' :  this.router.url.includes('edit') ? 'Edit' : 'Add'
   }
 
@@ -72,6 +75,7 @@ export class InstitutionAddComponent implements OnInit {
     if (this.router.url.includes('view')) {
       this.form.disable();
     }
+    this.spinner.hide()
   }
   allFiles: any;
   // onFileChange(event: any) {
@@ -130,6 +134,7 @@ export class InstitutionAddComponent implements OnInit {
       // operator: ['', Validators.required],
     })
     this.activeRoute.paramMap.subscribe(params => {
+      this.spinner.show()
       this.productId = params.get('id');
       if (this.productId && this.router.url.includes('edit')) {
         this.edit = true;

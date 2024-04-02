@@ -2,6 +2,7 @@
 @import "../node_modules/font-awesome/scss/font-awesome.scss";
 @import '../node_modules/bootstrap/dist/css/bootstrap-grid.min.css';
 @import "~ng-pick-datetime/assets/style/picker.min.css";
+@import "~node_modules/ngx-spinner/animations/ball-beat.css";
 
 html,
 body {
@@ -105,6 +106,11 @@ body {
 // .mat-form-field-wrapper{
 //   padding-bottom: !important
 // }
+
+.mat-mdc-progress-spinner {
+  --mdc-circular-progress-active-indicator-color: red;
+}
+
 .custom-fixed-tables {
   margin-top: 1rem;
   overflow: auto;
