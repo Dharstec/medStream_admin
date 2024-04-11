@@ -90,7 +90,7 @@
                     <!-- <mat-select  placeholder="Institution" formControlName="institution" >
                       <mat-option *ngFor="let row of instList" [value]="row._id">{{row.name}}</mat-option>
                     </mat-select> -->
-                    <mat-select placeholder="Institution" formControlName="institution" (selectionChange)="onInstitutionChange()">
+                    <mat-select placeholder="Institution"  style="margin: 0 !important;" formControlName="institution" (selectionChange)="onInstitutionChange()">
                         <mat-option *ngFor="let row of instList" [value]="row._id">{{row.name}}</mat-option>
                       </mat-select>                      
                     <mat-error *ngIf="submitted && form.get('institution')?.errors?.required">{{'Institution is required'}}</mat-error>
@@ -102,7 +102,7 @@
             <hr class="new4">
             <div class="row">
                 <div class="section-b operatorCol col-4">
-                    <mat-select placeholder="Name" formControlName="operator" multiple>
+                    <mat-select placeholder="Name"  style="margin: 0 !important;" formControlName="operator" multiple>
                         <mat-option *ngFor="let row of ops" [value]="row._id">{{row.name}}</mat-option>
                       </mat-select>
                     <mat-error *ngIf="submitted && form.get('operator')?.errors?.required">{{'Operator is required'}}</mat-error>

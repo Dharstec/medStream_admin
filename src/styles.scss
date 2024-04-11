@@ -292,11 +292,17 @@ body {
 
 input::placeholder {
   color: #fff !important;
+  // font-size: 14px;
+  font-size: 16px;
   /* Change this color to your desired placeholder color */
+}
+.input{
+  font-size: 16px;
 }
 
 .mat-mdc-select-placeholder {
   color: white !important;
+  font-size: 16px;
 }
 
 .mdc-data-table__cell {
@@ -1282,4 +1288,12 @@ table thead {
 
 .mdc-data-table__cell {
   text-wrap: nowrap !important;
+}
+textarea.input::placeholder {
+  font-size: 16px;
+  font-family: 'Roboto', sans-serif;
+}
+textarea.input {
+  font-family: 'Roboto', sans-serif;/* Change the font family as desired */
+  font-size: 16px; /* Change the font size as desired */
 }
