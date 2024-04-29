@@ -210,6 +210,7 @@ export class InstitutionAddComponent implements OnInit {
       }
       if(this.imageUpload && this.imageUpload.length){
         formData.append('image', this.imageUpload[0])
+        formData.append('key', 'institutes')
         this.api.apiPostCall(formData, 'ImageUpload').subscribe(data => {
           if (data.status === true) {
              payload['image'] = data.Image
